@@ -35,7 +35,7 @@ export const sidebarLinks: SidebarLink[] = [
   {
     imgURL: '/assets/icons/user.svg',
     route: '/profile',
-    label: '个人资料',
+    label: '我的',
   },
   {
     imgURL: '/assets/icons/question.svg',
