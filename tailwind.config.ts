@@ -2,6 +2,7 @@ import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme'
 
 const config: Config = {
+  darkMode: ['class'],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -45,7 +46,7 @@ const config: Config = {
       // https://tailwindcss.com/docs/font-family#customizing-your-theme
       fontFamily: {
         inter: ['var(--font-inter)'],
-        spaceGrotesk: ['var(--font-spaceGrotesk)'],
+        lc: ['var(--font-yzklct)'],
       },
       boxShadow: {
         'light-100':

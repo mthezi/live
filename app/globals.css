@@ -1,5 +1,10 @@
 @import url("../styles/theme.css");
 @import '@fontsource-variable/jetbrains-mono/wght.css';
+@import '@fontsource/long-cang';
+
+:root {
+  --font-yzklct: 'Long Cang', sans-serif;
+}
 
 body {
   font-family: 'JetBrains Mono Variable', sans-serif;
