@@ -3,6 +3,7 @@ import './globals.css'
 import React from 'react'
 import { ClerkProvider } from '@clerk/nextjs'
 import { zhCN } from '@clerk/localizations'
+import { ThemeProvider } from '@/context/ThemeProvider'
 
 export const metadata: Metadata = {
   title: '码上人生',
@@ -16,18 +17,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <ClerkProvider
-      localization={zhCN}
-      appearance={{
-        elements: {
-          formButtonPrimary: 'primary-gradient',
-          footerActionLink: 'primary-text-gradient hover:text-primary-500',
-        },
-      }}
-    >
-      <html lang='zh-CN'>
-        <body>{children}</body>
-      </html>
-    </ClerkProvider>
+    <html lang='zh-CN'>
+      <ClerkProvider
+        localization={zhCN}
+        appearance={{
+          elements: {
+            formButtonPrimary: 'primary-gradient',
+            footerActionLink: 'primary-text-gradient hover:text-primary-500',
+          },
+        }}
+      >
+        <ThemeProvider>
+          <body>{children}</body>
+        </ThemeProvider>
+      </ClerkProvider>
+    </html>
   )
 }
