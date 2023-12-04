@@ -1,5 +1,5 @@
 @import url("../styles/theme.css");
-@import '@fontsource-variable/jetbrains-mono/wght-italic.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
 
 body {
   font-family: 'JetBrains Mono Variable', sans-serif;

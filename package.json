@@ -11,6 +11,8 @@
     "format:fix": "prettier --write --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@clerk/localizations": "^1.26.10",
+    "@clerk/nextjs": "^4.27.2",
     "@fontsource-variable/jetbrains-mono": "^5.0.18",
     "next": "14.0.3",
     "react": "^18",
