@@ -241,6 +241,6 @@
   }
 
   .no-focus {
-    @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:outline-none;
+    @apply focus-visible:ring-0 focus-visible:ring-transparent focus-visible:outline-none focus-visible:ring-offset-transparent;
   }
 }
