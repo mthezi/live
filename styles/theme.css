@@ -217,7 +217,7 @@
   }
 
   .card-wrapper {
-    @apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100;
+    @apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100 border-2 border-light-800 dark:border-dark-300;
   }
 
   .btn {
