@@ -4,19 +4,19 @@ import Image from 'next/image'
 import RenderTag from '@/components/shared/RenderTag'
 
 const hotQuestions = [
-  { _id: 1, title: '如何在React中使用useEffect' },
-  { _id: 2, title: '如何在React中使用useEffect' },
-  { _id: 3, title: '如何在React中使用useEffect' },
-  { _id: 4, title: '如何在React中使用useEffect' },
-  { _id: 5, title: '如何在React中使用useEffect' },
+  { _id: '1', title: '如何在React中使用useEffect' },
+  { _id: '2', title: '如何在React中使用useEffect' },
+  { _id: '3', title: '如何在React中使用useEffect' },
+  { _id: '4', title: '如何在React中使用useEffect' },
+  { _id: '5', title: '如何在React中使用useEffect' },
 ]
 
 const popularTags = [
-  { _id: 1, name: 'react', totalQuestions: 100 },
-  { _id: 2, name: 'vue', totalQuestions: 100 },
-  { _id: 3, name: 'javascript', totalQuestions: 100 },
-  { _id: 4, name: 'typescript', totalQuestions: 100 },
-  { _id: 5, name: 'nextjs', totalQuestions: 100 },
+  { _id: '1', name: 'react', totalQuestions: 100 },
+  { _id: '2', name: 'vue', totalQuestions: 100 },
+  { _id: '3', name: 'javascript', totalQuestions: 100 },
+  { _id: '4', name: 'typescript', totalQuestions: 100 },
+  { _id: '5', name: 'nextjs', totalQuestions: 100 },
 ]
 
 const RightSidebar = () => {

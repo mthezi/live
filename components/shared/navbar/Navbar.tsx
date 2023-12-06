@@ -16,7 +16,7 @@ const Navbar = () => {
           height={18}
           alt='码上人生Logo'
         />
-        <p className='h2-bold font-lc text-dark-100 dark:text-light-900 max-sm:hidden'>
+        <p className='h2-bold  text-dark-100 dark:text-light-900 max-sm:hidden'>
           <span className='text-primary-500'>码</span>上人生
         </p>
       </Link>

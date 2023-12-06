@@ -157,19 +157,19 @@
   }
 
   .small-regular {
-    @apply text-[12px] font-normal leading-[15.6px];
+    @apply text-[12px] font-normal leading-normal;
   }
 
   .small-medium {
-    @apply text-[12px] font-medium leading-[15.6px];
+    @apply text-[12px] font-medium leading-normal;
   }
 
   .small-semibold {
-    @apply text-[12px] font-semibold leading-[15.6px];
+    @apply text-[12px] font-semibold leading-normal;
   }
 
   .subtle-medium {
-    @apply text-[10px] font-medium leading-[13px] !important;
+    @apply text-[10px] font-medium leading-normal !important;
   }
 
   .subtle-regular {
@@ -217,7 +217,7 @@
   }
 
   .card-wrapper {
-    @apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100 rounded-2xl;
+    @apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100;
   }
 
   .btn {
