@@ -33,12 +33,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         : 'light'
     }
     setMode(finalMode)
+
+    // md 编译器 dark主题适配
+    document.documentElement.setAttribute('data-color-mode', finalMode)
+
     localStorage.setItem('theme', finalMode)
   }
 
   // getInitialTheme 函数用到了客户端才有的 localStorage，所以需要在客户端渲染时执行，这里使用 useEffect 来实现
   useEffect(() => {
-    setMode(getInitialTheme())
+    const initialTheme = getInitialTheme()
+    setMode(initialTheme)
+    // md 编译器 dark主题适配
+    document.documentElement.setAttribute('data-color-mode', initialTheme)
   }, [])
 
   useEffect(() => {
