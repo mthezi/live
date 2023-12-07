@@ -6,53 +6,13 @@ import { HomePageFilters } from '@/constants/filters'
 import HomeFilter from '@/components/home/HomeFilter'
 import NoResult from '@/components/shared/NoResult'
 import QuestionCard from '@/components/shared/card/QuestionCard'
+import { getQuestions } from '@/lib/actions/question.action'
 
-const questions = [
-  {
-    _id: 'q1',
-    title: '如何学习JavaScript?',
-    description: '探讨有效学习JavaScript的方法和资源。',
-    tags: [
-      { _id: 't1', name: '编程' },
-      { _id: 't2', name: 'JavaScript' },
-    ],
-    author: {
-      _id: 'u1',
-      name: '张三',
-      picture: 'zhangsan_picture_url',
-    },
-    upvotes: 12000000,
-    views: 3000000000,
-    answers: [
-      { _id: 'a1', content: '首先，可以从基础开始学习...', author: '李四' },
-      { _id: 'a2', content: '我推荐阅读相关的在线教程...', author: '王五' },
-    ],
-    createdAt: new Date('2023-12-01'),
-  },
-  {
-    _id: 'q2',
-    title: '最好的前端框架是什么?',
-    description: '讨论当前流行的前端框架，以及各自的优缺点。',
-    tags: [
-      { _id: 't3', name: '前端' },
-      { _id: 't4', name: '框架' },
-    ],
-    author: {
-      _id: 'u2',
-      name: '赵六',
-      picture: 'zhaoliu_picture_url',
-    },
-    upvotes: 85,
-    views: 220,
-    answers: [
-      { _id: 'a3', content: '我个人更喜欢React...', author: '孙七' },
-      { _id: 'a4', content: 'Vue具有轻量级和易上手的优势...', author: '周八' },
-    ],
-    createdAt: new Date('2023-11-25'),
-  },
-]
 
-export default function Home() {
+export default async function Home() {
+  // @ts-ignore
+  const result = await getQuestions()
+  console.log(result)
   return (
     <>
       <div className='flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center'>
@@ -80,8 +40,8 @@ export default function Home() {
       <HomeFilter />
 
       <div className='mt-10 flex w-full flex-col gap-6'>
-        {questions.length > 0 ? (
-          questions.map((question) => (
+        {result.questions.length > 0 ? (
+          result.questions.map((question) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
