@@ -1,7 +1,10 @@
 'use client'
 
 import React, { useState } from 'react'
-import MDEditor from '@uiw/react-md-editor'
+import '@uiw/react-md-editor/markdown-editor.css'
+import '@uiw/react-markdown-preview/markdown.css'
+import dynamic from 'next/dynamic'
+import * as commands from '@uiw/react-md-editor/commands'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -20,12 +23,25 @@ import { Button } from '@/components/ui/button'
 import { QuestionSchema } from '@/lib/validations'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
+import { createQuestion } from '@/lib/actions/question.action'
+import { useRouter, usePathname } from 'next/navigation'
+
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+})
 
 const type: any = 'create'
 
-const Question = () => {
+interface QuestionProps {
+  mongoUserId: string
+}
+
+const Question = ({ mongoUserId }: QuestionProps) => {
   const [value, setValue] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const router = useRouter()
+  const pathname = usePathname()
 
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
@@ -36,13 +52,20 @@ const Question = () => {
     },
   })
 
-  function onSubmit(values: z.infer<typeof QuestionSchema>) {
+  async function onSubmit(values: z.infer<typeof QuestionSchema>) {
     setIsSubmitting(true)
 
     try {
       // 异步请求创建一个新问题
-      // await createQuestion(values)
+      await createQuestion({
+        title: values.title,
+        content: values.explanation,
+        tags: values.tags,
+        author: JSON.parse(mongoUserId),
+        path: pathname,
+      })
       // 成功后跳转到问题详情页
+      router.push('/')
     } catch (error) {
     } finally {
       setIsSubmitting(false)
@@ -117,7 +140,7 @@ const Question = () => {
         <FormField
           control={form.control}
           name='explanation'
-          render={() => (
+          render={({ field }) => (
             <FormItem className='flex w-full flex-col gap-3'>
               <FormLabel className='paragraph-semibold text-dark400_light900'>
                 详情 <span className='text-primary-500'>*</span>
@@ -125,9 +148,11 @@ const Question = () => {
               <FormControl className='mt-3.5'>
                 <MDEditor
                   value={value}
+                  onBlur={field.onBlur}
                   onChange={(v) => {
                     // @ts-ignore
                     setValue(v)
+                    field.onChange(v)
                   }}
                 />
               </FormControl>

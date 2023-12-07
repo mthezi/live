@@ -63,7 +63,8 @@ code {
   -webkit-hyphens: auto;
   hyphens: auto;
   padding: 2px;
-  color: #ff7000 !important;
+  /* 修复颜色篡改 */
+  /*color: #ff7000 !important;*/
 }
 
 .markdown pre {
