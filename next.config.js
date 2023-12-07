@@ -1,13 +1,28 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    serverActions: true,
     mdxRs: true,
     serverComponentsExternalPackages: ['mongoose'],
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+        port: '',
+        pathname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
+        port: '',
+        pathname: '**',
+      },
+    ],
   },
 }
 
 const removeImports = require('next-remove-imports')()
 
-module.exports = nextConfig
 module.exports = removeImports({})
+module.exports = nextConfig
