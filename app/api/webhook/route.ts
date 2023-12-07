@@ -13,7 +13,7 @@ import { NextResponse } from 'next/server' // 从 '@clerk/nextjs/server' 导入 
 export async function POST(req: Request) {
   // 定义异步函数 POST
   // 从 Clerk 仪表板 - > Webhooks - > 选择 webhook 中找到这个
-  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
+  const WEBHOOK_SECRET = process.env.NEXT_CLERK_WEBHOOK_SECRET
   if (!WEBHOOK_SECRET) {
     // 如果 WEBHOOK_SECRET不存在
     throw new Error( // 抛出错误
@@ -52,6 +52,7 @@ export async function POST(req: Request) {
   }
 
   const eventType = evt.type
+  console.log('事件类型:', eventType)
   if (eventType === 'user.created') {
     // 如果事件类型是 '创建用户'
     const { id, email_addresses, image_url, username, first_name, last_name } =
