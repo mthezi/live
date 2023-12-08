@@ -1,6 +1,7 @@
 'use server'
 
 import {
+  AnswerVoteParams,
   CreateAnswerParams,
   GetAnswersParams,
 } from '@/lib/actions/shared.types'
@@ -40,6 +41,83 @@ export async function getAnswers(params: GetAnswersParams) {
       .sort({ createdAt: -1 })
 
     return { answers }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+
+export async function upvoteAnswer(parmas: AnswerVoteParams) {
+  console.log('=> 点赞回答');
+  
+  try {
+    await connectToDatabase()
+
+    const { answerId, userId, hasupvoted, hasdownvoted, path } = parmas
+
+    console.log('=> 点赞回答', answerId, userId, hasupvoted, hasdownvoted, path);
+    
+
+    let updateQuery = {}
+
+    if (hasupvoted) {
+      updateQuery = { $pull: { upvotes: userId } }
+    } else if (hasdownvoted) {
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId },
+      }
+    } else {
+      updateQuery = { $addToSet: { upvotes: userId } }
+    }
+
+    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
+      new: true,
+    })
+
+    console.log('=> 点赞问题', answer);
+    
+
+    if (!answer) {
+      throw new Error('回答不存在')
+    }
+
+    revalidatePath(path)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function downvoteAnswer(parmas: AnswerVoteParams) {
+  try {
+    await connectToDatabase()
+
+    const { answerId, userId, hasupvoted, hasdownvoted, path } = parmas
+
+    let updateQuery = {}
+
+    if (hasdownvoted) {
+      updateQuery = { $pull: { downvotes: userId } }
+    } else if (hasupvoted) {
+      updateQuery = {
+        $pull: { upvotes: userId },
+        $push: { downvotes: userId },
+      }
+    } else {
+      updateQuery = { $addToSet: { downvotes: userId } }
+    }
+
+    const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
+      new: true,
+    })
+
+    if (!answer) {
+      throw new Error('回答不存在')
+    }
+
+    revalidatePath(path)
   } catch (error) {
     console.log(error)
     throw error

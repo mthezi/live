@@ -17,12 +17,12 @@ interface AllAnswersProps {
 }
 
 const AllAnswers = async ({
-                            questionId,
-                            userId,
-                            totalAnswers,
-                            page,
-                            filter,
-                          }: AllAnswersProps) => {
+  questionId,
+  userId,
+  totalAnswers,
+  page,
+  filter,
+}: AllAnswersProps) => {
   const result = await getAnswers({ questionId })
   return (
     <div className='mt-11'>
@@ -34,8 +34,7 @@ const AllAnswers = async ({
         {result.answers.map((answer) => (
           <article key={answer._id} className='light-border border-b py-10'>
             <div className='flex items-center justify-between'>
-              <div
-                className='mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2'>
+              <div className='mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2'>
                 <Link
                   href={`/profile/${answer.author.clerkId}`}
                   className='flex flex-1 items-start gap-1 sm:items-center'
@@ -52,15 +51,22 @@ const AllAnswers = async ({
                       {answer.author.name}
                     </p>
 
-                    <p
-                      className='small-regular text-light400_light500 mt-0.5 line-clamp-1'>
+                    <p className='small-regular text-light400_light500 mt-0.5 line-clamp-1'>
                       <span className='max-sm:hidden'> - </span>
                       {getTimeStamp(answer.createdAt)} 回答
                     </p>
                   </div>
                 </Link>
                 <div className='flex justify-end'>
-                  <Votes />
+                  <Votes
+                    type='answer'
+                    itemId={JSON.stringify(answer._id)}
+                    userId={JSON.stringify(userId)}
+                    upvotes={answer.upvotes.length}
+                    hasupvoted={answer.upvotes.includes(userId)}
+                    downvotes={answer.downvotes.length}
+                    hasdownvoted={answer.downvotes.includes(userId)}
+                  />
                 </div>
               </div>
             </div>

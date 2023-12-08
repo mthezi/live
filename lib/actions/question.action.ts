@@ -7,6 +7,7 @@ import {
   CreateQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
+  QuestionVoteParams,
 } from '@/lib/actions/shared.types'
 import User from '@/database/user.model'
 import { revalidatePath } from 'next/cache'
@@ -86,6 +87,82 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
       })
 
     return question
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function upvoteQuestion(parmas: QuestionVoteParams) {
+  console.log('=> 点赞问题');
+  
+  try {
+    await connectToDatabase()
+
+    const { questionId, userId, hasupvoted, hasdownvoted, path } = parmas
+
+    console.log('=> 点赞问题', questionId, userId, hasupvoted, hasdownvoted, path);
+    
+
+    let updateQuery = {}
+
+    if (hasupvoted) {
+      updateQuery = { $pull: { upvotes: userId } }
+    } else if (hasdownvoted) {
+      updateQuery = {
+        $pull: { downvotes: userId },
+        $push: { upvotes: userId },
+      }
+    } else {
+      updateQuery = { $addToSet: { upvotes: userId } }
+    }
+
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    })
+
+    console.log('=> 点赞问题', question);
+    
+
+    if (!question) {
+      throw new Error('问题不存在')
+    }
+
+    revalidatePath(path)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function downvoteQuestion(parmas: QuestionVoteParams) {
+  try {
+    await connectToDatabase()
+
+    const { questionId, userId, hasupvoted, hasdownvoted, path } = parmas
+
+    let updateQuery = {}
+
+    if (hasdownvoted) {
+      updateQuery = { $pull: { downvotes: userId } }
+    } else if (hasupvoted) {
+      updateQuery = {
+        $pull: { upvotes: userId },
+        $push: { downvotes: userId },
+      }
+    } else {
+      updateQuery = { $addToSet: { downvotes: userId } }
+    }
+
+    const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
+      new: true,
+    })
+
+    if (!question) {
+      throw new Error('问题不存在')
+    }
+
+    revalidatePath(path)
   } catch (error) {
     console.log(error)
     throw error

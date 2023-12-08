@@ -33,6 +33,12 @@ export const getTimeStamp = (createdAt: Date): string => {
 }
 
 export function formatLargeNumber(number: number): string {
+
+  // 健壮性判断
+  if (number === null || number === undefined) {
+    return '0'
+  }
+  
   if (number < 10000) {
     return number.toString()
   } else if (number < 100000000) {
