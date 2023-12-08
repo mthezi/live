@@ -8,3 +8,7 @@ export const QuestionSchema = z.object({
     .min(1, '至少要有1个标签')
     .max(3, '最多只能有3个标签'),
 })
+
+export const AnswerSchema = z.object({
+  answer: z.string().min(100, '内容至少 100 个字符'),
+})

@@ -5,6 +5,7 @@ import Question from '@/database/question.model'
 import Tag from '@/database/tag.model'
 import {
   CreateQuestionParams,
+  GetQuestionByIdParams,
   GetQuestionsParams,
 } from '@/lib/actions/shared.types'
 import User from '@/database/user.model'
@@ -27,7 +28,6 @@ export async function getQuestions(params: GetQuestionsParams) {
 export async function createQuestion(params: CreateQuestionParams) {
   try {
     console.log('=> 创建问题')
-    console.log(params)
     await connectToDatabase()
     const { title, content, tags, author, path } = params
 
@@ -66,4 +66,28 @@ export async function createQuestion(params: CreateQuestionParams) {
 
     revalidatePath(path)
   } catch (error) {}
+}
+
+export async function getQuestionById(params: GetQuestionByIdParams) {
+  try {
+    await connectToDatabase()
+
+    const { questionId } = params
+    const question = await Question.findById(questionId)
+      .populate({
+        path: 'tags',
+        model: Tag,
+        select: '_id name',
+      })
+      .populate({
+        path: 'author',
+        model: User,
+        select: '_id clerkId name picture',
+      })
+
+    return question
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
 }

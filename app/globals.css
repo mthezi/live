@@ -49,35 +49,35 @@ body {
 }
 
 /* Markdown Start */
-.markdown a {
-  color: #1da1f2;
-}
+/*.markdown a {*/
+/*  color: #1da1f2;*/
+/*}*/
 
-.markdown a,
-code {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-word;
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-  padding: 2px;
-  /* 修复颜色篡改 */
-  /*color: #ff7000 !important;*/
-}
+/*.markdown a,*/
+/*code {*/
+/*  overflow-wrap: break-word;*/
+/*  word-wrap: break-word;*/
+/*  word-break: break-word;*/
+/*  -ms-hyphens: auto;*/
+/*  -moz-hyphens: auto;*/
+/*  -webkit-hyphens: auto;*/
+/*  hyphens: auto;*/
+/*  padding: 2px;*/
+/*  !* 修复颜色篡改 *!*/
+/*  !*color: #ff7000 !important;*!*/
+/*}*/
 
-.markdown pre {
-  display: grid;
-  width: 100%;
-}
+/*.markdown pre {*/
+/*  display: grid;*/
+/*  width: 100%;*/
+/*}*/
 
-.markdown pre code {
-  width: 100%;
-  display: block;
-  overflow-x: auto;
-  color: inherit !important;
-}
+/*.markdown pre code {*/
+/*  width: 100%;*/
+/*  display: block;*/
+/*  overflow-x: auto;*/
+/*  color: inherit !important;*/
+/*}*/
 
 /* Markdown End */
 
