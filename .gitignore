@@ -2,6 +2,9 @@
 # idea
 .idea
 
+.VSCodeCounter
+.fleet
+
 # dependencies
 /node_modules
 /.pnp
