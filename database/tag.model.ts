@@ -1,4 +1,5 @@
 import { Schema, models, model, Document } from 'mongoose'
+import Question from '@/database/question.model'
 
 export interface ITag extends Document {
   name: string
@@ -11,7 +12,7 @@ export interface ITag extends Document {
 const TagSchema = new Schema({
   name: { type: String, required: true, unique: true },
   description: { type: String, required: true },
-  questions: [{ type: Schema.Types.ObjectId, ref: 'Question' }],
+  questions: [{ type: Schema.Types.ObjectId, ref: Question }],
   followers: [{ type: Schema.Types.ObjectId, ref: 'User' }],
   createdOn: { type: Date, default: Date.now },
 })

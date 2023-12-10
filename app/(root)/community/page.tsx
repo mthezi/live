@@ -5,15 +5,23 @@ import { UserFilters } from '@/constants/filters'
 import { getAllUsers } from '@/lib/actions/user.action'
 import Link from 'next/link'
 import UserCard from '@/components/shared/card/UserCard'
+import { SearchParamsProps } from '@/types'
+import Pagination from '@/components/shared/Pagination'
 
-const Page = async () => {
-  const result = await getAllUsers()
+const Page = async ({ searchParams }: SearchParamsProps) => {
+  const result = await getAllUsers({
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+    pageSize: 10,
+  })
 
   return (
     <>
       <h1 className='h1-bold text-dark100_light900'>社区成员</h1>
 
-      <div className='mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center'>
+      <div
+        className='mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center'>
         <LocalSearchbar
           route='/community'
           iconPosition='left'
@@ -31,7 +39,8 @@ const Page = async () => {
         {result.users.length > 0 ? (
           result.users.map((user) => <UserCard key={user.name} user={user} />)
         ) : (
-          <div className='paragraph-regular text-dark200_light800 mx-auto max-w-4xl text-center'>
+          <div
+            className='paragraph-regular text-dark200_light800 mx-auto max-w-4xl text-center'>
             <p>暂无用户</p>
             <Link
               href={'/sign-up'}
@@ -42,6 +51,13 @@ const Page = async () => {
           </div>
         )}
       </section>
+
+      <div className='mt-10'>
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
+      </div>
     </>
   )
 }

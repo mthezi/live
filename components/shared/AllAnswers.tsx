@@ -7,12 +7,13 @@ import Image from 'next/image'
 import { getTimeStamp } from '@/lib/utils'
 import ParseHTML from '@/components/shared/ParseHTML'
 import Votes from '@/components/shared/Votes'
+import Pagination from '@/components/shared/Pagination'
 
 interface AllAnswersProps {
   questionId: string
   userId: string
   totalAnswers: number
-  page?: number
+  page?: number | string
   filter?: string
 }
 
@@ -23,7 +24,12 @@ const AllAnswers = async ({
   page,
   filter,
 }: AllAnswersProps) => {
-  const result = await getAnswers({ questionId })
+  const result = await getAnswers({
+    questionId,
+    page: page ? Number(page) : 1,
+    pageSize: 5,
+    sortBy: filter
+  })
   return (
     <div className='mt-11'>
       <div className='flex items-center justify-between'>
@@ -34,7 +40,8 @@ const AllAnswers = async ({
         {result.answers.map((answer) => (
           <article key={answer._id} className='light-border border-b py-10'>
             <div className='flex items-center justify-between'>
-              <div className='mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2'>
+              <div
+                className='mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2'>
                 <Link
                   href={`/profile/${answer.author.clerkId}`}
                   className='flex flex-1 items-start gap-1 sm:items-center'
@@ -51,7 +58,8 @@ const AllAnswers = async ({
                       {answer.author.name}
                     </p>
 
-                    <p className='small-regular text-light400_light500 mt-0.5 line-clamp-1'>
+                    <p
+                      className='small-regular text-light400_light500 mt-0.5 line-clamp-1'>
                       <span className='max-sm:hidden'> - </span>
                       {getTimeStamp(answer.createdAt)} 回答
                     </p>
@@ -73,6 +81,12 @@ const AllAnswers = async ({
             <ParseHTML data={answer.content} />
           </article>
         ))}
+      </div>
+      <div className='mt-10'>
+        <Pagination
+          pageNumber={page ? +page : 1}
+          isNext={result.isNext}
+        />
       </div>
     </div>
   )

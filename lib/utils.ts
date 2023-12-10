@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-
+import qs from 'query-string'
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -38,7 +38,7 @@ export function formatLargeNumber(number: number): string {
   if (number === null || number === undefined) {
     return '0'
   }
-  
+
   if (number < 10000) {
     return number.toString()
   } else if (number < 100000000) {
@@ -46,4 +46,50 @@ export function formatLargeNumber(number: number): string {
   } else {
     return (number / 100000000).toFixed(1) + '亿'
   }
+}
+
+
+export function formatDateToChinese(date: Date): string {
+  const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 月份是从 0 开始的
+
+    // 使用模板字符串来格式化日期，确保月份是两位数字
+    return `${year}年${month.toString().padStart(2, '0')}月`;
+}
+
+interface UrlQueryParams {
+  params: string
+  key: string
+  value: string | null
+}
+
+export const formUrlQuery = ({params, key, value}: UrlQueryParams ) => {
+  const currentUrl = qs.parse(params)
+
+  currentUrl[key] = value
+  return qs.stringifyUrl({
+    url: window.location.pathname,
+    query: currentUrl,
+  },
+  {skipNull: true}
+  )
+}
+
+interface RemoveUrlQueryParams {
+  params: string
+  keysToRemove: string[]
+}
+
+export const removeKeysFromQuery = ({params, keysToRemove}: RemoveUrlQueryParams ) => {
+  const currentUrl = qs.parse(params)
+
+  keysToRemove.forEach((key) => {
+    delete currentUrl[key]
+  })
+  return qs.stringifyUrl({
+    url: window.location.pathname,
+    query: currentUrl,
+  },
+   {skipNull: true}
+   )
 }

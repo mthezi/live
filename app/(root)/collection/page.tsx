@@ -5,16 +5,25 @@ import NoResult from '@/components/shared/NoResult'
 import QuestionCard from '@/components/shared/card/QuestionCard'
 import { getSavedQuestions } from '@/lib/actions/user.action'
 import { auth } from '@clerk/nextjs'
+import { SearchParamsProps } from '@/types'
+import Pagination from '@/components/shared/Pagination'
+import React from 'react'
 
-export default async function Page() {
+export default async function Page({ searchParams }: SearchParamsProps) {
   const { userId } = auth()
-  // @ts-ignore
-  const result = await getSavedQuestions({clerkId: userId})
+  const result = await getSavedQuestions({
+    clerkId: userId!,
+    searchQuery: searchParams.q,
+    filter: searchParams.filter,
+    page: searchParams.page ? +searchParams.page : 1,
+    pageSize: 10,
+  })
   return (
     <>
       <h1 className='h1-bold text-dark100_light900'>我的收藏</h1>
 
-      <div className='mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center'>
+      <div
+        className='mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center'>
         <LocalSearchbar
           route='/'
           iconPosition='left'
@@ -29,7 +38,7 @@ export default async function Page() {
       </div>
       <div className='mt-10 flex w-full flex-col gap-6'>
         {result.questions.length > 0 ? (
-          result.questions.map((question) => (
+          result.questions.map((question: any) => (
             <QuestionCard
               key={question._id}
               _id={question._id}
@@ -51,6 +60,12 @@ export default async function Page() {
             linkTitle='尝试进行提问'
           />
         )}
+      </div>
+      <div className='mt-10'>
+        <Pagination
+          pageNumber={searchParams?.page ? +searchParams.page : 1}
+          isNext={result.isNext}
+        />
       </div>
     </>
   )

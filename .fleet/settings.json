@@ -1,0 +1,20 @@
+{
+  "plugins": [
+    {
+      "type": "add",
+      "pluginName": "fleet.tailwindcss"
+    },
+    {
+      "type": "add",
+      "pluginName": "fleet.smartMode"
+    },
+    {
+      "type": "add",
+      "pluginName": "fleet.xml"
+    },
+    {
+      "type": "add",
+      "pluginName": "fleet.intellij"
+    }
+  ]
+}

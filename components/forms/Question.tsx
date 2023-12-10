@@ -23,54 +23,69 @@ import { Button } from '@/components/ui/button'
 import { QuestionSchema } from '@/lib/validations'
 import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
-import { createQuestion } from '@/lib/actions/question.action'
+import { createQuestion, editQuestion } from '@/lib/actions/question.action'
 import { useRouter, usePathname } from 'next/navigation'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
 })
 
-const type: any = 'create'
-
 interface QuestionProps {
+  type?: string
   mongoUserId: string
+  questionDetails?: string
 }
 
-const Question = ({ mongoUserId }: QuestionProps) => {
-  const [value, setValue] = useState('')
+const Question = ({ type, mongoUserId, questionDetails }: QuestionProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const router = useRouter()
   const pathname = usePathname()
 
+  const parsedQuestionDetails = JSON.parse(questionDetails || '{}')
+  const groupedTags = parsedQuestionDetails.tags && parsedQuestionDetails.tags.map((tag: any) => tag.name)
+
+  const [value, setValue] = useState(parsedQuestionDetails.content || '')
+
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
     defaultValues: {
-      title: '',
-      explanation: '',
-      tags: [],
+      title: parsedQuestionDetails.title || '',
+      explanation: parsedQuestionDetails.content || '',
+      tags: groupedTags || [],
     },
   })
 
   async function onSubmit(values: z.infer<typeof QuestionSchema>) {
     setIsSubmitting(true)
 
-    try {
-      // 异步请求创建一个新问题
-      await createQuestion({
+    if (type === 'edit') {
+      await editQuestion({
+        questionId: parsedQuestionDetails._id,
         title: values.title,
         content: values.explanation,
-        tags: values.tags,
-        author: JSON.parse(mongoUserId),
         path: pathname,
       })
-      // 成功后跳转到问题详情页
-      router.push('/')
-    } catch (error) {
-    } finally {
-      setIsSubmitting(false)
+
+      router.push(`/question/${parsedQuestionDetails._id}`)
+    } else {
+      try {
+        // 异步请求创建一个新问题
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: JSON.parse(mongoUserId),
+          path: pathname,
+        })
+        // 成功后跳转到问题详情页
+        router.push('/')
+      } catch (error) {
+      } finally {
+        setIsSubmitting(false)
+      }
+      console.log(values)
     }
-    console.log(values)
   }
 
   function handleInputKeyDown(
@@ -177,6 +192,7 @@ const Question = ({ mongoUserId }: QuestionProps) => {
                   <Input
                     className='no-focus paragraph-regular background-light900_dark300 light-border-2 text-dark300_light700 min-h-[56x] border'
                     placeholder='添加标签'
+                    disabled={type === 'edit'}
                     onKeyDown={(e) => handleInputKeyDown(e, field)}
                   />
                   {field.value.length > 0 && (
@@ -187,14 +203,18 @@ const Question = ({ mongoUserId }: QuestionProps) => {
                           className='subtle-medium background-light800_dark300 text-light400_light500 flex items-center justify-center gap-2 rounded-md border-none px-4 py-2 capitalize'
                         >
                           {tag}
-                          <Image
-                            src='/assets/icons/close.svg'
-                            alt='关闭图标'
-                            width={12}
-                            height={12}
-                            className='cursor-pointer object-contain invert-0 dark:invert'
-                            onClick={() => handleTagRemove(tag, field)}
-                          />
+                          {type === 'create' && (
+                            <Image
+                              src='/assets/icons/close.svg'
+                              alt='关闭图标'
+                              width={12}
+                              height={12}
+                              className='cursor-pointer object-contain invert-0 dark:invert'
+                              onClick={() =>
+                                type === 'create' && handleTagRemove(tag, field)
+                              }
+                            />
+                          )}
                         </Badge>
                       ))}
                     </div>

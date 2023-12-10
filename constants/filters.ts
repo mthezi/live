@@ -1,8 +1,8 @@
 export const AnswerFilters = [
-  { name: '最高赞', value: 'highestUpvotes' },
-  { name: '最低赞', value: 'lowestUpvotes' },
-  { name: '最新', value: 'recent' },
-  { name: '最早', value: 'old' },
+  { name: '最多点赞', value: 'highestUpvotes' },
+  { name: '最少点赞', value: 'lowestUpvotes' },
+  { name: '最新回答', value: 'recent' },
+  { name: '早先回答', value: 'old' },
 ]
 
 export const UserFilters = [
@@ -14,7 +14,7 @@ export const UserFilters = [
 export const QuestionFilters = [
   { name: '最新提问', value: 'most_recent' },
   { name: '最早提问', value: 'oldest' },
-  { name: '最多投票', value: 'most_voted' },
+  { name: '最多点赞', value: 'most_voted' },
   { name: '最多查看', value: 'most_viewed' },
   { name: '回答最多', value: 'most_answered' },
 ]
@@ -27,10 +27,10 @@ export const TagFilters = [
 ]
 
 export const HomePageFilters = [
-  { name: '最新', value: 'newest' },
-  { name: '推荐', value: 'recommended' },
-  { name: '频繁', value: 'frequent' },
-  { name: '未回答', value: 'unanswered' },
+  { name: '最新提问', value: 'newest' },
+  { name: '推荐提问', value: 'recommended' },
+  { name: '最多查看', value: 'frequent' },
+  { name: '无人回答', value: 'unanswered' },
 ]
 
 export const GlobalSearchFilters = [

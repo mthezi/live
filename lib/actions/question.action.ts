@@ -5,21 +5,61 @@ import Question from '@/database/question.model'
 import Tag from '@/database/tag.model'
 import {
   CreateQuestionParams,
+  DeleteQuestionParams,
+  EditQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
   QuestionVoteParams,
 } from '@/lib/actions/shared.types'
 import User from '@/database/user.model'
 import { revalidatePath } from 'next/cache'
+import Answer from '@/database/answer.model'
+import Interaction from '@/database/interaction.model'
+import { FilterQuery } from 'mongoose'
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     await connectToDatabase()
-    const questions = await Question.find({})
+
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params
+    const skip = (page - 1) * pageSize
+
+    const query: FilterQuery<typeof Question> = {}
+
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchQuery, 'i') } },
+        { content: { $regex: new RegExp(searchQuery, 'i') } },
+      ]
+    }
+
+    let sortOptions = {}
+
+    switch (filter) {
+      case 'newest':
+        sortOptions = { createdAt: -1 }
+        break
+      case 'frequent':
+        sortOptions = { views: -1 }
+        break
+      case 'unanswered':
+        query.answers = { $size: 0 }
+        break
+      default:
+        break
+    }
+
+    const questions = await Question.find(query)
       .populate({ path: 'tags', model: Tag })
       .populate({ path: 'author', model: User })
-      .sort({ createdAt: -1 })
-    return { questions }
+      .skip(skip)
+      .limit(pageSize)
+      .sort(sortOptions)
+
+    const total = await Question.countDocuments(query)
+    const isNext = total > skip + questions.length
+
+    return { questions, isNext }
   } catch (error) {
     console.log(error)
     throw error
@@ -94,15 +134,21 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
 }
 
 export async function upvoteQuestion(parmas: QuestionVoteParams) {
-  console.log('=> 点赞问题');
-  
+  console.log('=> 点赞问题')
+
   try {
     await connectToDatabase()
 
     const { questionId, userId, hasupvoted, hasdownvoted, path } = parmas
 
-    console.log('=> 点赞问题', questionId, userId, hasupvoted, hasdownvoted, path);
-    
+    console.log(
+      '=> 点赞问题',
+      questionId,
+      userId,
+      hasupvoted,
+      hasdownvoted,
+      path
+    )
 
     let updateQuery = {}
 
@@ -121,8 +167,7 @@ export async function upvoteQuestion(parmas: QuestionVoteParams) {
       new: true,
     })
 
-    console.log('=> 点赞问题', question);
-    
+    console.log('=> 点赞问题', question)
 
     if (!question) {
       throw new Error('问题不存在')
@@ -166,5 +211,72 @@ export async function downvoteQuestion(parmas: QuestionVoteParams) {
   } catch (error) {
     console.log(error)
     throw error
+  }
+}
+
+export async function deleteQuestion(params: DeleteQuestionParams) {
+  try {
+    await connectToDatabase()
+
+    const { questionId, path } = params
+
+    // 删除问题
+    await Question.deleteOne({ _id: questionId })
+
+    // 删除问题的回答
+    await Answer.deleteMany({ question: questionId })
+
+    // 删除问题的标签
+    await Tag.updateMany(
+      { questions: questionId },
+      { $pull: { questions: questionId } }
+    )
+
+    // 删除问题的交互
+    await Interaction.deleteMany({ question: questionId })
+
+    revalidatePath(path)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function editQuestion(params: EditQuestionParams) {
+  try {
+    await connectToDatabase()
+
+    const { questionId, title, content, path } = params
+
+    const question = await Question.findById(questionId).populate('tags')
+
+    if (!question) {
+      throw new Error('问题不存在')
+    }
+
+    question.title = title
+    question.content = content
+
+    await question.save()
+
+    revalidatePath(path)
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+
+export async function getHotQuestions() {
+  try {
+    await connectToDatabase()
+
+    const hotQuestions = await Question.find({})
+      .sort({ views: -1, upvotes: -1 })
+      .limit(5)
+
+    return hotQuestions
+  } catch (e) {
+    console.log(e)
+    throw e
   }
 }

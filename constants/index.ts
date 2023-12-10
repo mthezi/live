@@ -22,11 +22,11 @@ export const sidebarLinks: SidebarLink[] = [
     route: '/collection',
     label: '收藏',
   },
-  {
-    imgURL: '/assets/icons/suitcase.svg',
-    route: '/jobs',
-    label: '工作',
-  },
+  // {
+  //   imgURL: '/assets/icons/suitcase.svg',
+  //   route: '/jobs',
+  //   label: '工作',
+  // },
   {
     imgURL: '/assets/icons/tag.svg',
     route: '/tags',

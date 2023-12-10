@@ -3,16 +3,18 @@ import Link from 'next/link'
 import RenderTag from '@/components/shared/RenderTag'
 import Metric from '@/components/shared/Metric'
 import { formatLargeNumber, getTimeStamp } from '@/lib/utils'
+import { SignedIn } from '@clerk/nextjs'
+import EditDeleteAction from '../EditDeleteAction'
 
 interface QuestionCardProps {
   _id: string
   title: string
-  description: string
   tags: {
     _id: string
     name: string
   }[]
   author: {
+    clerkId: string
     _id: string
     name: string
     picture: string
@@ -21,6 +23,7 @@ interface QuestionCardProps {
   views: number
   answers: Array<object>
   createdAt: Date
+  clerkId?: string
 }
 
 const QuestionCard = ({
@@ -32,7 +35,9 @@ const QuestionCard = ({
   views,
   answers,
   createdAt,
+  clerkId
 }: QuestionCardProps) => {
+  const showActionButtons = clerkId && author.clerkId === clerkId
   return (
     <div className='card-wrapper rounded-[10px] p-9 sm:px-11'>
       <div className='flex flex-col-reverse items-start justify-between gap-5 sm:flex-row'>
@@ -40,12 +45,20 @@ const QuestionCard = ({
           <span className='subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden'>
             {getTimeStamp(createdAt)}
           </span>
-          <Link href={`question/${_id}`}>
+          <Link href={`/question/${_id}`}>
             <h3 className='sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1'>
               {title}
             </h3>
           </Link>
         </div>
+        <SignedIn>
+          {showActionButtons && (
+            <EditDeleteAction
+              type='question'
+              itemId={JSON.stringify(_id)}
+            />
+          )}
+        </SignedIn>
       </div>
       <div className='mt-3.5 flex flex-wrap gap-2'>
         {tags.map((tag) => (

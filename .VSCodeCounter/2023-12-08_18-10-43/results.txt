@@ -1,0 +1,199 @@
+Date : 2023-12-08 18:10:43
+Directory : e:\project\live
+Total : 123 files,  17325 codes, 98 comments, 618 blanks, all 18041 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| JSON               |          4 |     12,711 |          0 |          3 |     12,714 |
+| TypeScript JSX     |         40 |      2,681 |         15 |        275 |      2,971 |
+| TypeScript         |         20 |      1,144 |         48 |        225 |      1,417 |
+| XML                |         52 |        445 |          0 |         27 |        472 |
+| CSS                |          2 |        241 |         32 |         80 |        353 |
+| Markdown           |          1 |         43 |          0 |          2 |         45 |
+| JavaScript         |          2 |         32 |          1 |          4 |         37 |
+| JSON with Comments |          2 |         28 |          2 |          2 |         32 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                           | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                              |        123 |     17,325 |         98 |        618 |     18,041 |
+| . (Files)                                                      |         11 |     12,913 |         15 |         16 |     12,944 |
+| app                                                            |         14 |        656 |         46 |         80 |        782 |
+| app (Files)                                                    |          2 |         89 |         31 |         23 |        143 |
+| app\(auth)                                                     |          2 |         16 |          0 |          4 |         20 |
+| app\(auth)\sign-in                                             |          1 |          8 |          0 |          2 |         10 |
+| app\(auth)\sign-in\[[...sign-in]]                              |          1 |          8 |          0 |          2 |         10 |
+| app\(auth)\sign-up                                             |          1 |          8 |          0 |          2 |         10 |
+| app\(auth)\sign-up\[[...sign-up]]                              |          1 |          8 |          0 |          2 |         10 |
+| app\(root)                                                     |          9 |        467 |          3 |         45 |        515 |
+| app\(root) (Files)                                             |          1 |         19 |          1 |          3 |         23 |
+| app\(root)\(home)                                              |          1 |         64 |          1 |          4 |         69 |
+| app\(root)\ask-question                                        |          1 |         21 |          0 |          5 |         26 |
+| app\(root)\collection                                          |          1 |         54 |          1 |          3 |         58 |
+| app\(root)\community                                           |          1 |         44 |          0 |          6 |         50 |
+| app\(root)\profile                                             |          1 |         49 |          0 |          6 |         55 |
+| app\(root)\profile\[id]                                        |          1 |         49 |          0 |          6 |         55 |
+| app\(root)\question                                            |          1 |        110 |          0 |          6 |        116 |
+| app\(root)\question\[id]                                       |          1 |        110 |          0 |          6 |        116 |
+| app\(root)\tags                                                |          2 |        106 |          0 |         12 |        118 |
+| app\(root)\tags (Files)                                        |          1 |         52 |          0 |          7 |         59 |
+| app\(root)\tags\[id]                                           |          1 |         54 |          0 |          5 |         59 |
+| app\api                                                        |          1 |         84 |         12 |          8 |        104 |
+| app\api\webhook                                                |          1 |         84 |         12 |          8 |        104 |
+| components                                                     |         27 |      2,107 |          8 |        209 |      2,324 |
+| components\forms                                               |          2 |        319 |          5 |         25 |        349 |
+| components\home                                                |          1 |         29 |          0 |          3 |         32 |
+| components\shared                                              |         16 |        995 |          3 |         82 |      1,080 |
+| components\shared (Files)                                      |          9 |        560 |          3 |         51 |        614 |
+| components\shared\card                                         |          2 |        145 |          0 |         10 |        155 |
+| components\shared\navbar                                       |          3 |        216 |          0 |         11 |        227 |
+| components\shared\search                                       |          2 |         74 |          0 |         10 |         84 |
+| components\ui                                                  |          8 |        764 |          0 |         99 |        863 |
+| constants                                                      |          2 |        101 |          5 |          9 |        115 |
+| context                                                        |          1 |         57 |          4 |         14 |         75 |
+| database                                                       |          5 |        118 |          0 |         24 |        142 |
+| lib                                                            |          9 |        694 |         19 |        170 |        883 |
+| lib (Files)                                                    |          3 |         86 |          2 |         20 |        108 |
+| lib\actions                                                    |          6 |        608 |         17 |        150 |        775 |
+| public                                                         |         52 |        445 |          0 |         27 |        472 |
+| public (Files)                                                 |          2 |          2 |          0 |          0 |          2 |
+| public\assets                                                  |         50 |        443 |          0 |         27 |        470 |
+| public\assets\icons                                            |         46 |        380 |          0 |         23 |        403 |
+| public\assets\images                                           |          4 |         63 |          0 |          4 |         67 |
+| styles                                                         |          1 |        186 |          1 |         60 |        247 |
+| types                                                          |          1 |         48 |          0 |          9 |         57 |
++----------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                       | language           | code       | comment    | blank      | total      |
++----------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| e:\project\live\.eslintrc.json                                 | JSON with Comments |          3 |          0 |          1 |          4 |
+| e:\project\live\.prettierrc.json                               | JSON               |         11 |          0 |          1 |         12 |
+| e:\project\live\README.md                                      | Markdown           |         43 |          0 |          2 |         45 |
+| e:\project\live\app\(auth)\sign-in\[[...sign-in]]\page.tsx     | TypeScript JSX     |          8 |          0 |          2 |         10 |
+| e:\project\live\app\(auth)\sign-up\[[...sign-up]]\page.tsx     | TypeScript JSX     |          8 |          0 |          2 |         10 |
+| e:\project\live\app\(root)\(home)\page.tsx                     | TypeScript JSX     |         64 |          1 |          4 |         69 |
+| e:\project\live\app\(root)\ask-question\page.tsx               | TypeScript JSX     |         21 |          0 |          5 |         26 |
+| e:\project\live\app\(root)\collection\page.tsx                 | TypeScript JSX     |         54 |          1 |          3 |         58 |
+| e:\project\live\app\(root)\community\page.tsx                  | TypeScript JSX     |         44 |          0 |          6 |         50 |
+| e:\project\live\app\(root)\layout.tsx                          | TypeScript JSX     |         19 |          1 |          3 |         23 |
+| e:\project\live\app\(root)\profile\[id]\page.tsx               | TypeScript JSX     |         49 |          0 |          6 |         55 |
+| e:\project\live\app\(root)\question\[id]\page.tsx              | TypeScript JSX     |        110 |          0 |          6 |        116 |
+| e:\project\live\app\(root)\tags\[id]\page.tsx                  | TypeScript JSX     |         54 |          0 |          5 |         59 |
+| e:\project\live\app\(root)\tags\page.tsx                       | TypeScript JSX     |         52 |          0 |          7 |         59 |
+| e:\project\live\app\api\webhook\route.ts                       | TypeScript         |         84 |         12 |          8 |        104 |
+| e:\project\live\app\globals.css                                | CSS                |         55 |         31 |         20 |        106 |
+| e:\project\live\app\layout.tsx                                 | TypeScript JSX     |         34 |          0 |          3 |         37 |
+| e:\project\live\components.json                                | JSON               |         16 |          0 |          0 |         16 |
+| e:\project\live\components\forms\Answer.tsx                    | TypeScript JSX     |        110 |          1 |         10 |        121 |
+| e:\project\live\components\forms\Question.tsx                  | TypeScript JSX     |        209 |          4 |         15 |        228 |
+| e:\project\live\components\home\HomeFilter.tsx                 | TypeScript JSX     |         29 |          0 |          3 |         32 |
+| e:\project\live\components\shared\AllAnswers.tsx               | TypeScript JSX     |         77 |          0 |          5 |         82 |
+| e:\project\live\components\shared\Filter.tsx                   | TypeScript JSX     |         47 |          0 |          4 |         51 |
+| e:\project\live\components\shared\LeftSidebar.tsx              | TypeScript JSX     |         85 |          0 |          7 |         92 |
+| e:\project\live\components\shared\Metric.tsx                   | TypeScript JSX     |         56 |          0 |          6 |         62 |
+| e:\project\live\components\shared\NoResult.tsx                 | TypeScript JSX     |         40 |          0 |          5 |         45 |
+| e:\project\live\components\shared\ParseHTML.tsx                | TypeScript JSX     |         14 |          0 |          4 |         18 |
+| e:\project\live\components\shared\RenderTag.tsx                | TypeScript JSX     |         27 |          0 |          4 |         31 |
+| e:\project\live\components\shared\RightSidebar.tsx             | TypeScript JSX     |         62 |          0 |          5 |         67 |
+| e:\project\live\components\shared\Votes.tsx                    | TypeScript JSX     |        152 |          3 |         11 |        166 |
+| e:\project\live\components\shared\card\QuestionCard.tsx        | TypeScript JSX     |         88 |          0 |          6 |         94 |
+| e:\project\live\components\shared\card\UserCard.tsx            | TypeScript JSX     |         57 |          0 |          4 |         61 |
+| e:\project\live\components\shared\navbar\MobileNavbar.tsx      | TypeScript JSX     |        104 |          0 |          5 |        109 |
+| e:\project\live\components\shared\navbar\Navbar.tsx            | TypeScript JSX     |         43 |          0 |          3 |         46 |
+| e:\project\live\components\shared\navbar\Theme.tsx             | TypeScript JSX     |         69 |          0 |          3 |         72 |
+| e:\project\live\components\shared\search\GlobalSearch.tsx      | TypeScript JSX     |         24 |          0 |          4 |         28 |
+| e:\project\live\components\shared\search\LocalSearchbar.tsx    | TypeScript JSX     |         50 |          0 |          6 |         56 |
+| e:\project\live\components\ui\badge.tsx                        | TypeScript JSX     |         31 |          0 |          6 |         37 |
+| e:\project\live\components\ui\button.tsx                       | TypeScript JSX     |         51 |          0 |          6 |         57 |
+| e:\project\live\components\ui\form.tsx                         | TypeScript JSX     |        152 |          0 |         25 |        177 |
+| e:\project\live\components\ui\input.tsx                        | TypeScript JSX     |         21 |          0 |          5 |         26 |
+| e:\project\live\components\ui\label.tsx                        | TypeScript JSX     |         21 |          0 |          6 |         27 |
+| e:\project\live\components\ui\menubar.tsx                      | TypeScript JSX     |        217 |          0 |         20 |        237 |
+| e:\project\live\components\ui\select.tsx                       | TypeScript JSX     |        146 |          0 |         15 |        161 |
+| e:\project\live\components\ui\sheet.tsx                        | TypeScript JSX     |        125 |          0 |         16 |        141 |
+| e:\project\live\constants\filters.ts                           | TypeScript         |         36 |          0 |          6 |         42 |
+| e:\project\live\constants\index.ts                             | TypeScript         |         65 |          5 |          3 |         73 |
+| e:\project\live\context\ThemeProvider.tsx                      | TypeScript JSX     |         57 |          4 |         14 |         75 |
+| e:\project\live\database\answer.model.ts                       | TypeScript         |         19 |          0 |          5 |         24 |
+| e:\project\live\database\interaction.model.ts                  | TypeScript         |         21 |          0 |          4 |         25 |
+| e:\project\live\database\question.model.ts                     | TypeScript         |         25 |          0 |          5 |         30 |
+| e:\project\live\database\tag.model.ts                          | TypeScript         |         17 |          0 |          5 |         22 |
+| e:\project\live\database\user.model.ts                         | TypeScript         |         36 |          0 |          5 |         41 |
+| e:\project\live\lib\actions\answer.action.ts                   | TypeScript         |         94 |          2 |         30 |        126 |
+| e:\project\live\lib\actions\interaction.action.ts              | TypeScript         |         28 |          0 |          7 |         35 |
+| e:\project\live\lib\actions\question.action.ts                 | TypeScript         |        134 |          6 |         31 |        171 |
+| e:\project\live\lib\actions\shared.types.d.ts                  | TypeScript         |        133 |          0 |         26 |        159 |
+| e:\project\live\lib\actions\tag.action.ts                      | TypeScript         |         69 |          2 |         16 |         87 |
+| e:\project\live\lib\actions\user.action.ts                     | TypeScript         |        150 |          7 |         40 |        197 |
+| e:\project\live\lib\mogoose.ts                                 | TypeScript         |         23 |          0 |          8 |         31 |
+| e:\project\live\lib\utils.ts                                   | TypeScript         |         51 |          2 |          9 |         62 |
+| e:\project\live\lib\validations.ts                             | TypeScript         |         12 |          0 |          3 |         15 |
+| e:\project\live\middleware.ts                                  | TypeScript         |         17 |          3 |          3 |         23 |
+| e:\project\live\next.config.js                                 | JavaScript         |         26 |          1 |          3 |         30 |
+| e:\project\live\package-lock.json                              | JSON               |     12,620 |          0 |          1 |     12,621 |
+| e:\project\live\package.json                                   | JSON               |         64 |          0 |          1 |         65 |
+| e:\project\live\postcss.config.js                              | JavaScript         |          6 |          0 |          1 |          7 |
+| e:\project\live\public\assets\icons\account.svg                | XML                |          4 |          0 |          0 |          4 |
+| e:\project\live\public\assets\icons\arrow-left.svg             | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\arrow-right.svg            | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\arrow-up-right.svg         | XML                |          9 |          0 |          0 |          9 |
+| e:\project\live\public\assets\icons\au.svg                     | XML                |         20 |          0 |          1 |         21 |
+| e:\project\live\public\assets\icons\avatar.svg                 | XML                |          3 |          0 |          2 |          5 |
+| e:\project\live\public\assets\icons\bronze-medal.svg           | XML                |         34 |          0 |          1 |         35 |
+| e:\project\live\public\assets\icons\calendar.svg               | XML                |          4 |          0 |          1 |          5 |
+| e:\project\live\public\assets\icons\carbon-location.svg        | XML                |          4 |          0 |          1 |          5 |
+| e:\project\live\public\assets\icons\chevron-down.svg           | XML                |         10 |          0 |          2 |         12 |
+| e:\project\live\public\assets\icons\chevron-right.svg          | XML                |         10 |          0 |          0 |         10 |
+| e:\project\live\public\assets\icons\clock-2.svg                | XML                |         10 |          0 |          0 |         10 |
+| e:\project\live\public\assets\icons\clock.svg                  | XML                |         10 |          0 |          1 |         11 |
+| e:\project\live\public\assets\icons\close.svg                  | XML                |          3 |          0 |          1 |          4 |
+| e:\project\live\public\assets\icons\computer.svg               | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\currency-dollar-circle.svg | XML                |         10 |          0 |          0 |         10 |
+| e:\project\live\public\assets\icons\downvote.svg               | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\downvoted.svg              | XML                |          4 |          0 |          0 |          4 |
+| e:\project\live\public\assets\icons\edit.svg                   | XML                |         11 |          0 |          1 |         12 |
+| e:\project\live\public\assets\icons\eye.svg                    | XML                |          4 |          0 |          1 |          5 |
+| e:\project\live\public\assets\icons\gold-medal.svg             | XML                |         38 |          0 |          1 |         39 |
+| e:\project\live\public\assets\icons\hamburger.svg              | XML                |          5 |          0 |          1 |          6 |
+| e:\project\live\public\assets\icons\home.svg                   | XML                |         11 |          0 |          0 |         11 |
+| e:\project\live\public\assets\icons\job-search.svg             | XML                |          3 |          0 |          1 |          4 |
+| e:\project\live\public\assets\icons\like.svg                   | XML                |          4 |          0 |          1 |          5 |
+| e:\project\live\public\assets\icons\link.svg                   | XML                |          4 |          0 |          1 |          5 |
+| e:\project\live\public\assets\icons\location.svg               | XML                |          4 |          0 |          1 |          5 |
+| e:\project\live\public\assets\icons\message.svg                | XML                |          3 |          0 |          1 |          4 |
+| e:\project\live\public\assets\icons\mingcute-down-line.svg     | XML                |         10 |          0 |          1 |         11 |
+| e:\project\live\public\assets\icons\moon.svg                   | XML                |          3 |          0 |          1 |          4 |
+| e:\project\live\public\assets\icons\question.svg               | XML                |          5 |          0 |          0 |          5 |
+| e:\project\live\public\assets\icons\search.svg                 | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\sign-up.svg                | XML                |          5 |          0 |          0 |          5 |
+| e:\project\live\public\assets\icons\silver-medal.svg           | XML                |         38 |          0 |          1 |         39 |
+| e:\project\live\public\assets\icons\star-filled.svg            | XML                |         14 |          0 |          0 |         14 |
+| e:\project\live\public\assets\icons\star-red.svg               | XML                |         14 |          0 |          0 |         14 |
+| e:\project\live\public\assets\icons\star.svg                   | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\stars.svg                  | XML                |          9 |          0 |          0 |          9 |
+| e:\project\live\public\assets\icons\suitcase.svg               | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\sun.svg                    | XML                |         11 |          0 |          0 |         11 |
+| e:\project\live\public\assets\icons\tag.svg                    | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\trash.svg                  | XML                |          4 |          0 |          1 |          5 |
+| e:\project\live\public\assets\icons\upvote.svg                 | XML                |          3 |          0 |          0 |          3 |
+| e:\project\live\public\assets\icons\upvoted.svg                | XML                |          4 |          0 |          0 |          4 |
+| e:\project\live\public\assets\icons\user.svg                   | XML                |          4 |          0 |          0 |          4 |
+| e:\project\live\public\assets\icons\users.svg                  | XML                |         10 |          0 |          0 |         10 |
+| e:\project\live\public\assets\images\default-logo.svg          | XML                |         11 |          0 |          1 |         12 |
+| e:\project\live\public\assets\images\logo-dark.svg             | XML                |         18 |          0 |          1 |         19 |
+| e:\project\live\public\assets\images\logo-light.svg            | XML                |         18 |          0 |          1 |         19 |
+| e:\project\live\public\assets\images\site-logo.svg             | XML                |         16 |          0 |          1 |         17 |
+| e:\project\live\public\next.svg                                | XML                |          1 |          0 |          0 |          1 |
+| e:\project\live\public\vercel.svg                              | XML                |          1 |          0 |          0 |          1 |
+| e:\project\live\styles\theme.css                               | CSS                |        186 |          1 |         60 |        247 |
+| e:\project\live\tailwind.config.ts                             | TypeScript         |         82 |          9 |          2 |         93 |
+| e:\project\live\tsconfig.json                                  | JSON with Comments |         25 |          2 |          1 |         28 |
+| e:\project\live\types\index.d.ts                               | TypeScript         |         48 |          0 |          9 |         57 |
+| Total                                                          |                    |     17,325 |         98 |        618 |     18,041 |
++----------------------------------------------------------------+--------------------+------------+------------+------------+------------+

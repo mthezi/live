@@ -217,7 +217,7 @@
   }
 
   .card-wrapper {
-    @apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100 border-2 border-light-800 dark:border-dark-300;
+    @apply bg-light-900 dark:dark-gradient shadow-light-100 dark:shadow-dark-100  border-light-800 dark:border-dark-300;
   }
 
   .btn {
@@ -236,8 +236,9 @@
     @apply max-w-full prose dark:prose-p:text-light-700 dark:prose-p;
   }
 
+  /* data-state="active" */
   .tab {
-    @apply min-h-full dark:bg-dark-400 bg-light-800 text-light-5;
+    @apply min-h-full dark:bg-dark-400 bg-light-800 text-light-500 data-[state=active]:bg-primary-100 data-[state=active]:text-primary-500 dark:data-[state=active]:bg-primary-500 dark:data-[state=active]:text-primary-100;
   }
 
   .no-focus {
