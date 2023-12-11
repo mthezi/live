@@ -16,6 +16,8 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { createAnswer } from '@/lib/actions/answer.action'
 import { usePathname } from 'next/navigation'
+import { getAIAnswer } from '@/lib/actions/ai.action'
+import toast from 'react-hot-toast'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
@@ -30,6 +32,7 @@ interface AnswerProps {
 const Answer = ({ authorId, question, questionId }: AnswerProps) => {
   const pathname = usePathname()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmittingAI, setIsSubmittingAI] = useState(false)
   const [value, setValue] = useState('')
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
@@ -40,6 +43,7 @@ const Answer = ({ authorId, question, questionId }: AnswerProps) => {
 
   const handleCreateAnswer = async (value: z.infer<typeof AnswerSchema>) => {
     setIsSubmitting(true)
+    const tid = toast.loading('提交中...')
 
     try {
       await createAnswer({
@@ -52,9 +56,33 @@ const Answer = ({ authorId, question, questionId }: AnswerProps) => {
 
       setValue('')
     } catch (error) {
-      console.log(error)
+      toast.error('提交失败')
     } finally {
+      toast.dismiss(tid)
       setIsSubmitting(false)
+    }
+  }
+
+  async function generateAIAnswer() {
+    if (!authorId) return
+
+    setIsSubmittingAI(true)
+    const tid = toast.loading('AI 生成中...')
+
+    try {
+      const answer = await getAIAnswer({
+        question,
+        userId: authorId,
+      })
+      if (answer) {
+        setValue(answer)
+        form.setValue('answer', answer)
+      }
+    } catch (e) {
+      toast.error('AI 生成失败')
+    } finally {
+      setIsSubmittingAI(false)
+      toast.dismiss(tid)
     }
   }
 
@@ -64,7 +92,8 @@ const Answer = ({ authorId, question, questionId }: AnswerProps) => {
         <h4 className='paragraph-semibold text-dark400_light800'>回答</h4>
         <Button
           className='btn light-border-2 gap-1.5 rounded-md px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500'
-          onClick={() => {}}
+          onClick={generateAIAnswer}
+          disabled={isSubmittingAI}
         >
           <Image
             src='/assets/icons/stars.svg'
@@ -73,7 +102,7 @@ const Answer = ({ authorId, question, questionId }: AnswerProps) => {
             height={12}
             className='object-contain'
           />
-          由 AI 生成答案
+          {isSubmittingAI ? 'AI生成中...' : '由 AI 生成答案'}
         </Button>
       </div>
       <Form {...form}>
@@ -90,6 +119,8 @@ const Answer = ({ authorId, question, questionId }: AnswerProps) => {
                   <MDEditor
                     value={value}
                     onBlur={field.onBlur}
+                    minHeight={350}
+                    height={350}
                     onChange={(v) => {
                       // @ts-ignore
                       setValue(v)

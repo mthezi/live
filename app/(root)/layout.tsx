@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from '@/components/shared/navbar/Navbar'
 import LeftSidebar from '@/components/shared/LeftSidebar'
 import RightSidebar from '@/components/shared/RightSidebar'
+import { Toaster } from 'react-hot-toast'
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -9,12 +10,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
       <Navbar />
       <div className='flex'>
         <LeftSidebar />
-        <section className='max-md:pd-14 w-full flex min-h-screen flex-1 flex-shrink flex-col px-6 pb-6 pt-36 sm:px-14'>
+        <section className='flex min-h-screen w-full flex-1 flex-col  px-6 pb-6 pt-36 max-md:pb-14 sm:px-14'>
           <div className='mx-auto w-full max-w-5xl'>{children}</div>
         </section>
         <RightSidebar />
       </div>
-      {/* Toaster */}
+      <Toaster />
     </main>
   )
 }

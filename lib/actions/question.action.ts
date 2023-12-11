@@ -10,6 +10,7 @@ import {
   GetQuestionByIdParams,
   GetQuestionsParams,
   QuestionVoteParams,
+  RecommendedParams,
 } from '@/lib/actions/shared.types'
 import User from '@/database/user.model'
 import { revalidatePath } from 'next/cache'
@@ -105,8 +106,19 @@ export async function createQuestion(params: CreateQuestionParams) {
       $push: { tags: { $each: tagDocs } },
     })
 
+    await Interaction.create({
+      user: author,
+      action: 'ask_question',
+      question: question._id,
+      tags: tagDocs,
+    })
+
+    await User.findByIdAndUpdate(author, { $inc: { reputation: 5 } })
+
     revalidatePath(path)
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export async function getQuestionById(params: GetQuestionByIdParams) {
@@ -167,12 +179,19 @@ export async function upvoteQuestion(parmas: QuestionVoteParams) {
       new: true,
     })
 
-    console.log('=> 点赞问题', question)
-
     if (!question) {
       throw new Error('问题不存在')
     }
 
+    // 更新投票用户声望
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasupvoted ? -1 : 1 },
+    })
+
+    // 更新问题作者声望
+    await User.findByIdAndUpdate(question.author, {
+      $inc: { reputation: hasupvoted ? -10 : 10 },
+    })
     revalidatePath(path)
   } catch (error) {
     console.log(error)
@@ -206,6 +225,14 @@ export async function downvoteQuestion(parmas: QuestionVoteParams) {
     if (!question) {
       throw new Error('问题不存在')
     }
+
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasdownvoted ? -2 : 2 },
+    })
+
+    await User.findByIdAndUpdate(question.author, {
+      $inc: { reputation: hasdownvoted ? 10 : -10 },
+    })
 
     revalidatePath(path)
   } catch (error) {
@@ -275,6 +302,70 @@ export async function getHotQuestions() {
       .limit(5)
 
     return hotQuestions
+  } catch (e) {
+    console.log(e)
+    throw e
+  }
+}
+
+export async function getRecommendedQuestions(params: RecommendedParams) {
+  try {
+    await connectToDatabase()
+
+    const { userId, page = 1, pageSize = 20, searchQuery } = params
+
+    const user = await User.findOne({ clerkId: userId })
+
+    if (!user) {
+      throw new Error('用户不存在')
+    }
+
+    const skip = (page - 1) * pageSize
+
+    const userInteactions = await Interaction.find({ user: user._id })
+      .populate('tags')
+      .exec()
+
+    const userTags = userInteactions.reduce((tags, interaction) => {
+      if (interaction.tags) {
+        tags.push(...interaction.tags)
+      }
+      return tags
+    }, [])
+
+    const distinctUserTags = Array.from(new Set(userTags.map((tag: any) => tag._id)))
+
+    const query: FilterQuery<typeof Question> = {
+      $and: [
+        { tags: { $in: distinctUserTags } },
+        { author: { $ne: user._id } },
+      ]
+    }
+
+    if (searchQuery) {
+      query.$or = [
+        { title: { $regex: new RegExp(searchQuery, 'i') } },
+        { content: { $regex: new RegExp(searchQuery, 'i') } },
+      ]
+    }
+
+    const totalQuestions = await Question.countDocuments(query)
+
+    const recommendedQuestion = await Question.find(query)
+      .populate({
+        path: 'tags',
+        model: Tag,
+      })
+      .populate({
+        path: 'author',
+        model: User,
+      })
+      .skip(skip)
+      .limit(pageSize)
+
+    const isNext = totalQuestions > skip + recommendedQuestion.length
+
+    return { questions: recommendedQuestion, isNext }
   } catch (e) {
     console.log(e)
     throw e

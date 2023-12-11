@@ -4,6 +4,18 @@
 
 :root {
   --font-yzklct: 'Long Cang', sans-serif;
+  --muted: 210 40% 96.1%;
+  --muted-foreground: 215.4 16.3% 46.9%;
+  --color-canvas-subtle: #f6f8fa;
+}
+
+:root[data-color-mode*='dark']
+{
+  --color-canvas-subtle: #484f58;
+}
+
+:root[data-color-mode*='light'] {
+  --color-canvas-subtle: #f6f8fa;
 }
 
 body {
@@ -36,7 +48,7 @@ body {
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: var(--color-canvas-subtle);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
@@ -48,36 +60,59 @@ body {
   background: #555;
 }
 
-/* Markdown Start */
-/*.markdown a {*/
-/*  color: #1da1f2;*/
-/*}*/
 
-/*.markdown a,*/
-/*code {*/
-/*  overflow-wrap: break-word;*/
-/*  word-wrap: break-word;*/
-/*  word-break: break-word;*/
-/*  -ms-hyphens: auto;*/
-/*  -moz-hyphens: auto;*/
-/*  -webkit-hyphens: auto;*/
-/*  hyphens: auto;*/
-/*  padding: 2px;*/
-/*  !* 修复颜色篡改 *!*/
-/*  !*color: #ff7000 !important;*!*/
-/*}*/
+.markdown a {
+  color: #1da1f2;
+}
 
-/*.markdown pre {*/
-/*  display: grid;*/
-/*  width: 100%;*/
-/*}*/
+.markdown .wmde-markdown {
+  background-color: unset;
+}
 
-/*.markdown pre code {*/
-/*  width: 100%;*/
-/*  display: block;*/
-/*  overflow-x: auto;*/
-/*  color: inherit !important;*/
-/*}*/
+.markdown .wmde-markdown pre > code::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+.markdown .wmde-markdown pre > code::-webkit-scrollbar-track {
+  background: var(--color-canvas-subtle);
+}
+
+.markdown .wmde-markdown pre > code::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 50px;
+}
+
+.markdown .wmde-markdown pre > code::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.markdown a,
+code {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  padding: 2px;
+  /* 修复颜色篡改 */
+  /*color: #ff7000 !important;*/
+}
+
+.markdown pre {
+  display: grid;
+  width: 100%;
+}
+
+.markdown pre code {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  color: inherit !important;
+}
 
 /* Markdown End */
 

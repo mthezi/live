@@ -35,7 +35,7 @@ const QuestionCard = ({
   views,
   answers,
   createdAt,
-  clerkId
+  clerkId,
 }: QuestionCardProps) => {
   const showActionButtons = clerkId && author.clerkId === clerkId
   return (
@@ -53,10 +53,7 @@ const QuestionCard = ({
         </div>
         <SignedIn>
           {showActionButtons && (
-            <EditDeleteAction
-              type='question'
-              itemId={JSON.stringify(_id)}
-            />
+            <EditDeleteAction type='question' itemId={JSON.stringify(_id)} />
           )}
         </SignedIn>
       </div>
@@ -72,32 +69,34 @@ const QuestionCard = ({
           alt='用户'
           value={author.name}
           title={` · ${getTimeStamp(createdAt)} 提问`}
-          href={`/profile/${author._id}`}
+          href={`/profile/${author.clerkId}`}
           isAuthor
           textStyles='body-medium text-dark400_light700'
         />
 
-        <Metric
-          imgUrl='/assets/icons/like.svg'
-          alt='点赞'
-          value={formatLargeNumber(upvotes.length)}
-          title='点赞'
-          textStyles='small-medium text-dark400_light800'
-        />
-        <Metric
-          imgUrl='/assets/icons/message.svg'
-          alt='评论'
-          value={formatLargeNumber(answers.length)}
-          title='评论'
-          textStyles='small-medium text-dark400_light800'
-        />
-        <Metric
-          imgUrl='/assets/icons/eye.svg'
-          alt='浏览'
-          value={formatLargeNumber(views)}
-          title='浏览'
-          textStyles='small-medium text-dark400_light800'
-        />
+        <div className='flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start'>
+          <Metric
+            imgUrl='/assets/icons/like.svg'
+            alt='点赞'
+            value={formatLargeNumber(upvotes.length)}
+            title='点赞'
+            textStyles='small-medium text-dark400_light800'
+          />
+          <Metric
+            imgUrl='/assets/icons/message.svg'
+            alt='评论'
+            value={formatLargeNumber(answers.length)}
+            title='评论'
+            textStyles='small-medium text-dark400_light800'
+          />
+          <Metric
+            imgUrl='/assets/icons/eye.svg'
+            alt='浏览'
+            value={formatLargeNumber(views)}
+            title='浏览'
+            textStyles='small-medium text-dark400_light800'
+          />
+        </div>
       </div>
     </div>
   )

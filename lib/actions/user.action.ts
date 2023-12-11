@@ -16,6 +16,10 @@ import { revalidatePath } from 'next/cache'
 import Question from '@/database/question.model'
 import Tag from '@/database/tag.model'
 import Answer from '@/database/answer.model'
+import { BadgeCriteriaType } from '@/types'
+import { assignBadges } from '@/lib/utils'
+import Interaction from '@/database/interaction.model'
+import { log } from 'console'
 
 export async function getUserById(params: GetUserByIdParams) {
   try {
@@ -128,6 +132,43 @@ export async function getAllUsers(params: GetAllUsersParams) {
       .skip(skip)
       .limit(pageSize)
 
+    for (const user of users) {
+      const userTags = await Interaction.find({
+        user: user._id,
+        action: 'ask_question',
+      }).populate({ path: 'tags', model: Tag, select: '_id name' })
+
+      const tags = userTags
+        .map((tag) => tag.tags)
+        .flat()
+        .reduce(
+          (acc, cur) => {
+            if (acc[cur]) {
+              acc[cur]++
+            } else {
+              acc[cur] = 1
+            }
+            return acc
+          },
+          {} as { [key: string]: number }
+        )
+
+      // console.log('tags', tags)
+      const formattedTags = Object.keys(tags).map((key) => {
+        const match = key.match(/ObjectId\('([^']+)'\)/)
+        const _id = match ? match[1] : null
+        const namePart = key.match(/name: '([^']+)'/)
+        const name = namePart ? namePart[1] : null
+        return { _id, name, nums: tags[key] }
+      })
+
+      const userObj = user.toObject()
+
+      // 将 formattedTags 添加到 userObj
+      userObj.tagsWithNums = formattedTags
+      users[users.indexOf(user)] = userObj
+    }
+
     const total = await User.countDocuments(query)
     const isNext = total > skip + users.length
     return { users, isNext }
@@ -228,13 +269,11 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
 
     const savedQuestions = await user.saved
 
-
     const isNext = savedQuestions.length > pageSize
 
     if (isNext) {
       savedQuestions.pop()
     }
-
 
     return { questions: savedQuestions, isNext }
   } catch (error) {
@@ -255,10 +294,105 @@ export async function getUserInfo(params: GetUserByIdParams) {
       throw new Error('用户不存在')
     }
 
+    // 查询Interactions中user为userId的所有action为'ask_question'的记录中的所有tags（数组），然后去重
+    const userTags = await Interaction.find({
+      user: user._id,
+      action: 'ask_question',
+    }).populate({ path: 'tags', model: Tag, select: '_id name' })
+
+    console.log('userTags', userTags)
+
+    // const tags = userTags
+    //   .map((tag) => tag.tags)
+    //   .flat()
+    //   .filter((tag, index, array) => array.indexOf(tag) === index)
+
+    // 去重前，需要先统计每个tag的数量，然后按照数量排序
+    const tags = userTags
+      .map((tag) => tag.tags)
+      .flat()
+      .reduce(
+        (acc, cur) => {
+          if (acc[cur]) {
+            acc[cur]++
+          } else {
+            acc[cur] = 1
+          }
+          return acc
+        },
+        {} as { [key: string]: number }
+      )
+
+    // console.log('tags', tags)
+    const formattedTags = Object.keys(tags).map((key) => {
+      const match = key.match(/ObjectId\('([^']+)'\)/)
+      const _id = match ? match[1] : null
+      const namePart = key.match(/name: '([^']+)'/)
+      const name = namePart ? namePart[1] : null
+      return { _id, name, nums: tags[key] }
+    })
+
+    // console.log('Formatted tags', formattedTags)
+
     const totalQuestions = await Question.countDocuments({ author: user._id })
     const totalAnswers = await Answer.countDocuments({ author: user._id })
 
-    return { user, totalQuestions, totalAnswers }
+    const [questionUpvotes] = await Question.aggregate([
+      { $match: { author: user._id } },
+      {
+        $project: {
+          _id: 0,
+          upvotes: { $size: '$upvotes' },
+        },
+      },
+      { $group: { _id: null, totalUpvotes: { $sum: '$upvotes' } } },
+    ])
+
+    const [answerUpvotes] = await Answer.aggregate([
+      { $match: { author: user._id } },
+      {
+        $project: {
+          _id: 0,
+          upvotes: { $size: '$upvotes' },
+        },
+      },
+      { $group: { _id: null, totalUpvotes: { $sum: '$upvotes' } } },
+    ])
+
+    const [questionViews] = await Question.aggregate([
+      { $match: { author: user._id } },
+      { $group: { _id: null, totalViews: { $sum: '$views' } } },
+    ])
+
+    const criteria = [
+      { type: 'QUESTION_COUNT' as BadgeCriteriaType, count: totalQuestions },
+      { type: 'ANSWER_COUNT' as BadgeCriteriaType, count: totalAnswers },
+      {
+        type: 'QUESTION_UPVOTES' as BadgeCriteriaType,
+        count: questionUpvotes?.totalUpvotes || 0,
+      },
+      {
+        type: 'ANSWER_UPVOTES' as BadgeCriteriaType,
+        count: answerUpvotes?.totalUpvotes || 0,
+      },
+      {
+        type: 'TOTAL_VIEWS' as BadgeCriteriaType,
+        count: questionViews?.totalViews || 0,
+      },
+    ]
+
+    console.log('criteria', criteria)
+
+    const badgeCounts = assignBadges({ criteria })
+
+    return {
+      user,
+      totalQuestions,
+      totalAnswers,
+      tagsWithNums: formattedTags,
+      badgeCounts,
+      reputation: user.reputation,
+    }
   } catch (error) {
     console.log(error)
     throw error

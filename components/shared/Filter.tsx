@@ -27,7 +27,7 @@ const Filter = ({ filters, containerClasses, otherClasses }: FilterProps) => {
   const paramFilter = searchParams.get('filter')
 
   const handleUpdateParams = (value: string) => {
-    let newUrl = ''
+    let newUrl: string
     if (value === searchParams.get('filter')) {
       newUrl = formUrlQuery({
         params: searchParams.toString(),
@@ -57,12 +57,12 @@ const Filter = ({ filters, containerClasses, otherClasses }: FilterProps) => {
             <SelectValue placeholder='筛选' />
           </div>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className='text-dark500_light700 small-regular border-none bg-light-900 dark:bg-dark-300'>
           <SelectGroup>
             {filters.map((filter) => (
               <SelectItem
                 key={filter.value}
-                className='body-regular text-dark500_light700'
+                className='body-regular text-dark500_light700 hover:bg-light-800 cursor-pointer focus:bg-light-800 dark:hover:bg-dark-400 dark:focus:bg-dark-400'
                 value={filter.value}
               >
                 {filter.name}

@@ -1,6 +1,7 @@
 import { formatLargeNumber } from '@/lib/utils'
 import Image from 'next/image'
 import React from 'react'
+import { BadgeCounts } from '@/types'
 
 interface StatsCardProps {
   imgUrl: string
@@ -23,11 +24,13 @@ const StatsCard = ({ imgUrl, value, title }: StatsCardProps) => {
   )
 }
 interface StatsProps {
+  reputation: number
   totalQuestions: number
   totalAnswers: number
+  badgeCounts: BadgeCounts
 }
 
-const Stats = ({ totalQuestions, totalAnswers }: StatsProps) => {
+const Stats = ({ reputation,totalQuestions, totalAnswers, badgeCounts }: StatsProps) => {
   return (
     <div className='mt-10'>
       <h4 className='h3-semibold text-dark200_light900'>个人数据</h4>
@@ -49,17 +52,17 @@ const Stats = ({ totalQuestions, totalAnswers }: StatsProps) => {
         </div>
         <StatsCard
           imgUrl='/assets/icons/gold-medal.svg'
-          value={0}
+          value={badgeCounts.GOLD}
           title='金牌'
         />
         <StatsCard
           imgUrl='/assets/icons/silver-medal.svg'
-          value={0}
+          value={badgeCounts.SILVER}
           title='银牌'
         />
         <StatsCard
           imgUrl='/assets/icons/bronze-medal.svg'
-          value={0}
+          value={badgeCounts.BRONZE}
           title='铜牌'
         />
       </div>

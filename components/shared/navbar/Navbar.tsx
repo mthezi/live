@@ -12,8 +12,8 @@ const Navbar = () => {
       <Link href='/' className='flex cursor-pointer items-center gap-1'>
         <Image
           src='/assets/images/site-logo.svg'
-          width={18}
-          height={18}
+          width={23}
+          height={23}
           alt='码上人生Logo'
         />
         <p className='h2-bold  text-dark-100 dark:text-light-900 max-sm:hidden'>

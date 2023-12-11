@@ -8,9 +8,9 @@ interface ParseHtmlProps {
 
 const ParseHtml = ({ data }: ParseHtmlProps) => {
   return (
-    <>
-      <MarkdownPreview source={data} />
-    </>
+    <div className='w-full min-w-full markdown '>
+      <MarkdownPreview source={data}/>
+    </div>
   )
 }
 

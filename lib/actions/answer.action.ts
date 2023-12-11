@@ -11,6 +11,7 @@ import Answer from '@/database/answer.model'
 import Question from '@/database/question.model'
 import { revalidatePath } from 'next/cache'
 import Interaction from '@/database/interaction.model'
+import User from '@/database/user.model'
 
 export async function createAnswer(params: CreateAnswerParams) {
   try {
@@ -21,11 +22,19 @@ export async function createAnswer(params: CreateAnswerParams) {
     const newAnswer = await Answer.create({ content, author, question })
 
     // 将回答添加到问题的回答数组中
-    await Question.findByIdAndUpdate(question, {
+    const newQuestion = await Question.findByIdAndUpdate(question, {
       $push: { answers: newAnswer._id },
     })
 
-    // 更多
+    await Interaction.create({
+      user: author,
+      action: 'answer',
+      question,
+      answer: newAnswer._id,
+      tags: newQuestion.tags,
+    })
+
+    await User.findByIdAndUpdate(author, { $inc: { reputation: 10 } })
 
     revalidatePath(path)
   } catch (error) {
@@ -60,7 +69,6 @@ export async function getAnswers(params: GetAnswersParams) {
         sortOptions = { createdAt: -1 }
     }
 
-
     const answers = await Answer.find({ question: questionId })
       .populate('author', '_id clerkId name picture')
       .sort(sortOptions)
@@ -78,14 +86,10 @@ export async function getAnswers(params: GetAnswersParams) {
 }
 
 export async function upvoteAnswer(parmas: AnswerVoteParams) {
-  console.log('=> 点赞回答')
-
   try {
     await connectToDatabase()
 
     const { answerId, userId, hasupvoted, hasdownvoted, path } = parmas
-
-    console.log('=> 点赞回答', answerId, userId, hasupvoted, hasdownvoted, path)
 
     let updateQuery = {}
 
@@ -104,11 +108,17 @@ export async function upvoteAnswer(parmas: AnswerVoteParams) {
       new: true,
     })
 
-    console.log('=> 点赞问题', answer)
-
     if (!answer) {
       throw new Error('回答不存在')
     }
+
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasupvoted ? -2 : 2 },
+    })
+
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasupvoted ? -10 : 10 },
+    })
 
     revalidatePath(path)
   } catch (error) {
@@ -143,6 +153,17 @@ export async function downvoteAnswer(parmas: AnswerVoteParams) {
     if (!answer) {
       throw new Error('回答不存在')
     }
+
+
+    // 点踩的人：1、取消点踩，声望减少2。2、点踩，声望增加2。
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasdownvoted ? -2 : 2 },
+    })
+
+    // 被点踩的人（作者）：1、取消点踩，声望加10。2、点踩，声望减少10。
+    await User.findByIdAndUpdate(answer.author, {
+      $inc: { reputation: hasdownvoted ? 10 : -10 },
+    })
 
     revalidatePath(path)
   } catch (error) {

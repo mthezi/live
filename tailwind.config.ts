@@ -41,6 +41,7 @@ const config: Config = {
           500: '#7B8EC8',
           400: '#858EAD',
         },
+        muted: '#F4F6F8',
         'accent-blue': '#1DA1F2',
       },
       // https://tailwindcss.com/docs/font-family#customizing-your-theme
@@ -85,7 +86,7 @@ const config: Config = {
     },
   },
   plugins: [
-    require('tailwindcss-animated'),
+    require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
   ],
 }

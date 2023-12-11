@@ -8,9 +8,15 @@ import { auth } from '@clerk/nextjs'
 import { SearchParamsProps } from '@/types'
 import Pagination from '@/components/shared/Pagination'
 import React from 'react'
+import toast from 'react-hot-toast'
+import { redirect } from 'next/navigation'
 
 export default async function Page({ searchParams }: SearchParamsProps) {
   const { userId } = auth()
+  if (!userId) {
+    toast.error('请先登录')
+    redirect('/sign-in')
+  }
   const result = await getSavedQuestions({
     clerkId: userId!,
     searchQuery: searchParams.q,
@@ -43,7 +49,7 @@ export default async function Page({ searchParams }: SearchParamsProps) {
               key={question._id}
               _id={question._id}
               title={question.title}
-              description={question.description}
+              // description={question.description}
               tags={question.tags}
               author={question.author}
               upvotes={question.upvotes}

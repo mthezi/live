@@ -17,6 +17,7 @@ import { Button } from '../ui/button'
 import { ProfileSchema } from '@/lib/validations'
 import { usePathname, useRouter } from 'next/navigation'
 import { updateUser } from '@/lib/actions/user.action'
+import toast from 'react-hot-toast'
 
 interface ProfileProps {
   clerkId: string
@@ -40,9 +41,9 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
     },
   })
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof ProfileSchema>) {
     setIsSubmitting(true)
+    const tid = toast.loading('保存中...')
 
     try {
       await updateUser({
@@ -54,12 +55,13 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
           location: values.location,
           bio: values.bio,
         },
-        path: pathname
+        path: pathname,
       })
       router.back()
     } catch (error) {
-      console.log(error)
+      toast.error('保存失败')
     } finally {
+      toast.dismiss(tid)
       setIsSubmitting(false)
     }
   }
@@ -75,13 +77,13 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
           name='name'
           render={({ field }) => (
             <FormItem className='space-y-3.5'>
-              <FormLabel>
+              <FormLabel className='paragraph-semibold text-dark400_light800'>
                 姓名 <span className='text-primary-500'>*</span>
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder='姓名'
-                  className='no-focus paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 min-h-[56px] border'
+                  className='no-focus paragraph-regular light-border-2 background-light800_dark300 text-dark300_light700 min-h-[56px] border'
                   {...field}
                 />
               </FormControl>
@@ -94,13 +96,13 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
           name='username'
           render={({ field }) => (
             <FormItem className='space-y-3.5'>
-              <FormLabel>
+              <FormLabel className='paragraph-semibold text-dark400_light800'>
                 用户名 <span className='text-primary-500'>*</span>
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder='用户名'
-                  className='no-focus paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 min-h-[56px] border'
+                  className='no-focus paragraph-regular light-border-2 background-light800_dark300 text-dark300_light700 min-h-[56px] border'
                   {...field}
                 />
               </FormControl>
@@ -113,12 +115,14 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
           name='portfolioWebsite'
           render={({ field }) => (
             <FormItem className='space-y-3.5'>
-              <FormLabel>作品链接</FormLabel>
+              <FormLabel className='paragraph-semibold text-dark400_light800'>
+                作品链接
+              </FormLabel>
               <FormControl>
                 <Input
                   type='url'
                   placeholder='你的作品集'
-                  className='no-focus paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 min-h-[56px] border'
+                  className='no-focus paragraph-regular light-border-2 background-light800_dark300 text-dark300_light700 min-h-[56px] border'
                   {...field}
                 />
               </FormControl>
@@ -132,11 +136,13 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
           name='location'
           render={({ field }) => (
             <FormItem className='space-y-3.5'>
-              <FormLabel>家乡</FormLabel>
+              <FormLabel className='paragraph-semibold text-dark400_light800'>
+                家乡
+              </FormLabel>
               <FormControl>
                 <Input
                   placeholder='那个美丽的地方'
-                  className='no-focus paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 min-h-[56px] border'
+                  className='no-focus paragraph-regular light-border-2 background-light800_dark300 text-dark300_light700 min-h-[56px] border'
                   {...field}
                 />
               </FormControl>
@@ -149,11 +155,13 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
           name='bio'
           render={({ field }) => (
             <FormItem className='space-y-3.5'>
-              <FormLabel>简介</FormLabel>
+              <FormLabel className='paragraph-semibold text-dark400_light800'>
+                简介
+              </FormLabel>
               <FormControl>
                 <Textarea
                   placeholder='你是一个怎样的人呢？介绍一下'
-                  className='no-focus paragraph-regular light-border-2 background-light700_dark300 text-dark300_light700 min-h-[56px] border'
+                  className='no-focus paragraph-regular light-border-2 background-light800_dark300 text-dark300_light700 min-h-[56px] border'
                   {...field}
                 />
               </FormControl>

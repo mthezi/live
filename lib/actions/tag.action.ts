@@ -10,6 +10,7 @@ import User from '@/database/user.model'
 import Tag, { ITag } from '@/database/tag.model'
 import { FilterQuery } from 'mongoose'
 import Question from '@/database/question.model'
+import Interaction from '@/database/interaction.model'
 
 export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
   try {
@@ -23,13 +24,32 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
       throw new Error('用户不存在')
     }
 
-    // const topTags = user.topTags.slice(0, limit)
-    // 等待创建Interaction集合
+    const userTags = await Interaction.find({
+      user: user._id,
+      action: 'ask_question',
+    }).populate({
+      path: 'tags',
+      model: Tag,
+      select: '_id name',
+    })
 
-    return [
-      { _id: '1', name: 'test' },
-      { _id: '2', name: 'test2' },
-    ]
+    // Simplify tag counting
+    const tagCounts: any = userTags
+      .flatMap((interaction) => interaction.tags)
+      .reduce((acc, tag) => {
+        const tagKey = tag._id.toString()
+        acc[tagKey] = acc[tagKey] || { count: 0, _id: tag._id, name: tag.name }
+        acc[tagKey].count++
+        return acc
+      }, {})
+
+    // Convert to array and apply limit
+    const formattedTags = Object.values(tagCounts)
+      .sort((a: any, b: any) => b.count - a.count) // Sort by count in descending order
+      .slice(0, limit) // Apply the limit
+      .map((tag: any) => ({ _id: tag._id, name: tag.name, nums: tag.count }))
+
+    return { tagsWithNums: formattedTags }
   } catch (error) {
     console.log(error)
     throw error
@@ -38,57 +58,57 @@ export async function getTopInteractedTags(params: GetTopInteractedTagsParams) {
 
 export async function getAllTags(params: GetAllTagsParams) {
   try {
-    await connectToDatabase();
+    await connectToDatabase()
 
-    const { searchQuery, filter, page = 1, pageSize = 10 } = params;
-    const skip = (page - 1) * pageSize;
-    let matchQuery = {};
+    const { searchQuery, filter, page = 1, pageSize = 10 } = params
+    const skip = (page - 1) * pageSize
+    let matchQuery = {}
 
     if (searchQuery) {
       matchQuery = {
         $or: [
           { name: { $regex: new RegExp(searchQuery, 'i') } },
           { description: { $regex: new RegExp(searchQuery, 'i') } },
-        ]
-      };
+        ],
+      }
     }
 
-    let sortOptions = {};
+    let sortOptions = {}
     switch (filter) {
       case 'popular':
-        sortOptions = { questionsCount: -1 };
-        break;
+        sortOptions = { questionsCount: -1 }
+        break
       case 'recent':
-        sortOptions = { createdOn: -1 };
-        break;
+        sortOptions = { createdOn: -1 }
+        break
       case 'name':
-        sortOptions = { name: 1 };
-        break;
+        sortOptions = { name: 1 }
+        break
       case 'old':
-        sortOptions = { createdOn: 1 };
-        break;
+        sortOptions = { createdOn: 1 }
+        break
       default:
-        sortOptions = { createdOn: -1 };
-        break;
+        sortOptions = { createdOn: -1 }
+        break
     }
 
     const aggregationPipeline = [
       { $match: matchQuery },
-      { $addFields: { questionsCount: { $size: "$questions" } } },
+      { $addFields: { questionsCount: { $size: '$questions' } } },
       { $sort: sortOptions },
       { $skip: skip },
-      { $limit: pageSize }
-    ];
+      { $limit: pageSize },
+    ]
 
-    const tags = await Tag.aggregate(aggregationPipeline);
+    const tags = await Tag.aggregate(aggregationPipeline)
 
-    const total = await Tag.countDocuments(matchQuery);
-    const isNext = total > skip + tags.length;
+    const total = await Tag.countDocuments(matchQuery)
+    const isNext = total > skip + tags.length
 
-    return { tags, isNext };
+    return { tags, isNext }
   } catch (error) {
-    console.log(error);
-    throw error;
+    console.log(error)
+    throw error
   }
 }
 
@@ -96,21 +116,36 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
   try {
     await connectToDatabase()
 
-    const { tagId, page = 1, pageSize = 10, searchQuery } = params
+    const { tagId, page = 1, pageSize = 10, searchQuery, clerkId } = params
     const skip = (page - 1) * pageSize
+
+     // 初始化 matchCondition 为一个空数组
+     const matchCondition = [];
+
+     // 如果 searchQuery 存在，则添加到 matchCondition
+     if (searchQuery) {
+       matchCondition.push({
+         $or: [
+           { title: { $regex: new RegExp(searchQuery, 'i') } },
+           { content: { $regex: new RegExp(searchQuery, 'i') } },
+         ],
+       });
+     }
+
+     // 如果 userId 存在且不为空，则添加到 matchCondition
+     if (clerkId) {
+       const user = await User.findOne({ clerkId });
+       if (!user) {
+         throw new Error('用户不存在');
+       }
+       matchCondition.push({ author: user._id });
+     }
 
     const tagFilter: FilterQuery<ITag> = { _id: tagId }
     const tag = await Tag.findOne(tagFilter).populate({
       path: 'questions',
       model: Question,
-      match: searchQuery
-        ? {
-            $or: [
-              { title: { $regex: new RegExp(searchQuery, 'i') } },
-              { content: { $regex: new RegExp(searchQuery, 'i') } },
-            ],
-          }
-        : {},
+      match: matchCondition.length > 0 ? { $and: matchCondition } : {},
       options: {
         sort: { createdAt: -1 },
         skip,
@@ -127,7 +162,6 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
     }
 
     const questions = await tag.questions
-
 
     const isNext = questions.length > pageSize
 

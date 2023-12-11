@@ -11,6 +11,7 @@ import ProfileLink from '@/components/shared/ProfileLink'
 import Stats from '@/components/shared/Stats'
 import QuestionTab from '@/components/shared/QuestionTab'
 import AnswerTab from '@/components/shared/AnswerTab'
+import RenderTag from '@/components/shared/RenderTag'
 
 const page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth()
@@ -19,7 +20,7 @@ const page = async ({ params, searchParams }: URLProps) => {
   })
   return (
     <>
-      <div className='flex flex-col-reverse items-center justify-between sm:flex-row'>
+      <div className='flex flex-col-reverse items-start justify-between sm:flex-row'>
         <div className='flex flex-col items-start gap-4 lg:flex-row'>
           <Image
             src={userInfo.user.picture}
@@ -37,7 +38,7 @@ const page = async ({ params, searchParams }: URLProps) => {
               @{userInfo.user.username}
             </p>
 
-            <div className='mt-5 flex flex-wrap items-center justify-center gap-5'>
+            <div className='mt-5 flex flex-wrap items-center justify-start gap-5'>
               {userInfo.user.portfolioWebsite && (
                 <ProfileLink
                   imgUrl='/assets/icons/link.svg'
@@ -55,13 +56,12 @@ const page = async ({ params, searchParams }: URLProps) => {
                 imgUrl='/assets/icons/calendar.svg'
                 title={formatDateToChinese(userInfo.user.joinedAt)}
               />
-              {/* {userInfo.user.bio && (
-                <p className='paragraph-regular text-dark400_light800 mt-8'>
-                  {userInfo.user.bio}
-                </p>
-              )} */}
             </div>
-            {userInfo.user.bio && <p>{userInfo.user.bio}</p>}
+            {userInfo.user.bio && (
+              <p className='paragraph-regular text-dark400_light800 mt-8'>
+                {userInfo.user.bio}
+              </p>
+            )}
           </div>
         </div>
         <div className='flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3'>
@@ -77,8 +77,10 @@ const page = async ({ params, searchParams }: URLProps) => {
         </div>
       </div>
       <Stats
+        reputation={userInfo.reputation}
         totalQuestions={userInfo.totalQuestions}
         totalAnswers={userInfo.totalAnswers}
+        badgeCounts={userInfo.badgeCounts}
       />
       <div className='mt-10 flex gap-10'>
         <Tabs defaultValue='top-posts' className='flex-1'>
@@ -90,14 +92,14 @@ const page = async ({ params, searchParams }: URLProps) => {
               最新回答
             </TabsTrigger>
           </TabsList>
-          <TabsContent value='top-posts' className='flex flex-col w-full gap-6'>
+          <TabsContent value='top-posts' className='flex w-full flex-col gap-6'>
             <QuestionTab
               searchParams={searchParams}
               userId={userInfo.user.id}
               clerkId={clerkId!}
             />
           </TabsContent>
-          <TabsContent value='answer' className='flex flex-col w-full gap-6'>
+          <TabsContent value='answer' className='flex w-full flex-col gap-6'>
             <AnswerTab
               searchParams={searchParams}
               userId={userInfo.user.id}
@@ -105,6 +107,21 @@ const page = async ({ params, searchParams }: URLProps) => {
             />
           </TabsContent>
         </Tabs>
+        <div className='flex min-w-[278px] flex-col max-lg:hidden'>
+          <h3 className='h3-bold text-dark200_light900'>我的标签</h3>
+          <div className='mt-7 flex flex-col gap-4'>
+            {userInfo.tagsWithNums.map((tag) => (
+              <RenderTag
+                href={`/tags/${tag._id}/?userId=${userInfo.user.clerkId}`}
+                key={tag._id}
+                _id={tag._id!}
+                name={tag.name!}
+                totalQuestions={tag.nums}
+                showCount
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </>
   )

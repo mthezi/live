@@ -25,6 +25,7 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 import { createQuestion, editQuestion } from '@/lib/actions/question.action'
 import { useRouter, usePathname } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
@@ -43,7 +44,9 @@ const Question = ({ type, mongoUserId, questionDetails }: QuestionProps) => {
   const pathname = usePathname()
 
   const parsedQuestionDetails = JSON.parse(questionDetails || '{}')
-  const groupedTags = parsedQuestionDetails.tags && parsedQuestionDetails.tags.map((tag: any) => tag.name)
+  const groupedTags =
+    parsedQuestionDetails.tags &&
+    parsedQuestionDetails.tags.map((tag: any) => tag.name)
 
   const [value, setValue] = useState(parsedQuestionDetails.content || '')
 
@@ -58,16 +61,24 @@ const Question = ({ type, mongoUserId, questionDetails }: QuestionProps) => {
 
   async function onSubmit(values: z.infer<typeof QuestionSchema>) {
     setIsSubmitting(true)
+    const tid = toast.loading('提交中...')
 
     if (type === 'edit') {
-      await editQuestion({
-        questionId: parsedQuestionDetails._id,
-        title: values.title,
-        content: values.explanation,
-        path: pathname,
-      })
+      try {
+        await editQuestion({
+          questionId: parsedQuestionDetails._id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        })
 
-      router.push(`/question/${parsedQuestionDetails._id}`)
+        router.push(`/question/${parsedQuestionDetails._id}`)
+      } catch (e) {
+        toast.error('修改失败')
+      } finally {
+        toast.dismiss(tid)
+        setIsSubmitting(false)
+      }
     } else {
       try {
         // 异步请求创建一个新问题
@@ -81,10 +92,10 @@ const Question = ({ type, mongoUserId, questionDetails }: QuestionProps) => {
         // 成功后跳转到问题详情页
         router.push('/')
       } catch (error) {
+        toast.error('发布失败')
       } finally {
         setIsSubmitting(false)
       }
-      console.log(values)
     }
   }
 
@@ -164,6 +175,8 @@ const Question = ({ type, mongoUserId, questionDetails }: QuestionProps) => {
                 <MDEditor
                   value={value}
                   onBlur={field.onBlur}
+                  minHeight={350}
+                  height={350}
                   onChange={(v) => {
                     // @ts-ignore
                     setValue(v)

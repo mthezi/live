@@ -141,7 +141,7 @@
   }
 
   .paragraph-semibold {
-    @apply text-[16px] font-semibold leading-[20.8px];
+    @apply text-[16px] font-semibold;
   }
 
   .body-regular {
@@ -232,13 +232,12 @@
     @apply bg-light-700 dark:bg-dark-300 !important;
   }
 
-  .markdown {
-    @apply max-w-full prose dark:prose-p:text-light-700 dark:prose-p;
-  }
-
+  /*.markdown {*/
+  /*  @apply max-w-full prose dark:prose-p:text-light-700 ;*/
+  /*}*/
   /* data-state="active" */
   .tab {
-    @apply min-h-full dark:bg-dark-400 bg-light-800 text-light-500 data-[state=active]:bg-primary-100 data-[state=active]:text-primary-500 dark:data-[state=active]:bg-primary-500 dark:data-[state=active]:text-primary-100;
+    @apply min-h-full dark:bg-dark-400 bg-light-800 text-light-500 data-[state=active]:bg-primary-100 data-[state=active]:text-primary-500 dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-primary-500 rounded-md data-[state=active]:shadow;
   }
 
   .no-focus {

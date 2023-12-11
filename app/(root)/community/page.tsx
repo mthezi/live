@@ -20,8 +20,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
     <>
       <h1 className='h1-bold text-dark100_light900'>社区成员</h1>
 
-      <div
-        className='mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center'>
+      <div className='mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center'>
         <LocalSearchbar
           route='/community'
           iconPosition='left'
@@ -39,8 +38,7 @@ const Page = async ({ searchParams }: SearchParamsProps) => {
         {result.users.length > 0 ? (
           result.users.map((user) => <UserCard key={user.name} user={user} />)
         ) : (
-          <div
-            className='paragraph-regular text-dark200_light800 mx-auto max-w-4xl text-center'>
+          <div className='paragraph-regular text-dark200_light800 mx-auto max-w-4xl text-center'>
             <p>暂无用户</p>
             <Link
               href={'/sign-up'}

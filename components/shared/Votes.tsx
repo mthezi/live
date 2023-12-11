@@ -7,7 +7,8 @@ import { formatLargeNumber } from '@/lib/utils'
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
-
+import { useToast } from '@/components/ui/use-toast'
+import toast from 'react-hot-toast'
 interface VotesProps {
   type: string
   itemId: string
@@ -43,7 +44,7 @@ const Votes = ({
 
   const handleVote = async (action: string) => {
     if (!userId) {
-      return
+      return toast.error('请先登录')
     }
     if (action === 'upvote') {
       if (type === 'question') {
@@ -63,8 +64,12 @@ const Votes = ({
           path: pathname,
         })
       }
-      // TODO: show toast
-      return
+
+      if (!hasupvoted) {
+        return toast.success('点赞成功')
+      } else {
+        return toast.success('取消点赞成功')
+      }
     }
 
     if (action === 'downvote') {
@@ -85,8 +90,12 @@ const Votes = ({
           path: pathname,
         })
       }
-      // TODO: show toast
-      // return
+
+      if (!hasdownvoted) {
+        return toast.success('点踩成功')
+      } else {
+        return toast.success('取消点踩成功')
+      }
     }
   }
 
@@ -96,6 +105,11 @@ const Votes = ({
       questionId: JSON.parse(itemId),
       path: pathname,
     })
+    if (!hasSaved) {
+      return toast.success('收藏成功')
+    } else {
+      return toast.success('取消收藏成功')
+    }
   }
 
   return (
@@ -118,7 +132,7 @@ const Votes = ({
           />
 
           <div className='flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1'>
-            <p>{formatLargeNumber(upvotes)}</p>
+            <p className='subtle-medium text-dark400_light900'>{formatLargeNumber(upvotes)}</p>
           </div>
         </div>
         <div className='flex-center gap-1.5'>
@@ -138,7 +152,7 @@ const Votes = ({
           />
 
           <div className='flex-center background-light700_dark400 min-w-[18px] rounded-sm p-1'>
-            <p>{formatLargeNumber(downvotes)}</p>
+            <p className='subtle-medium text-dark400_light900'>{formatLargeNumber(downvotes)}</p>
           </div>
         </div>
       </div>

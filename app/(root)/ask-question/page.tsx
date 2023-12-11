@@ -3,11 +3,13 @@ import Question from '@/components/forms/Question'
 import { auth } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { getUserById } from '@/lib/actions/user.action'
+import toast from 'react-hot-toast'
 
 const Page = async () => {
   const { userId } = auth()
 
   if (!userId) {
+    toast.error('请先登录')
     redirect('/sign-in')
   }
 

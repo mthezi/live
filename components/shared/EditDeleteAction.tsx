@@ -13,10 +13,10 @@ interface EditDeleteActionProps {
 const EditDeleteAction = ({ type, itemId }: EditDeleteActionProps) => {
   const pathname = usePathname()
   const router = useRouter()
-
+  // TODO: 添加提示
   const handleEdit = async () => {
     if (type === 'question') {
-      await router.push(`/question/edit/${JSON.parse(itemId)}`)
+      router.push(`/question/edit/${JSON.parse(itemId)}`)
     } else if (type === 'answer') {
       console.log('edit answer')
     }
