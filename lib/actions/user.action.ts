@@ -19,7 +19,6 @@ import Answer from '@/database/answer.model'
 import { BadgeCriteriaType } from '@/types'
 import { assignBadges } from '@/lib/utils'
 import Interaction from '@/database/interaction.model'
-import { log } from 'console'
 
 export async function getUserById(params: GetUserByIdParams) {
   try {
