@@ -18,6 +18,10 @@ const Page = async ({ params, searchParams }: URLProps) => {
   let mongoUser
   if (clerkId) {
     mongoUser = await getUserById({ userId: clerkId })
+  } else {
+    mongoUser = {
+      _id: ""
+    }
   }
   const result = await getQuestionById({ questionId: params.id })
   return (
@@ -43,12 +47,12 @@ const Page = async ({ params, searchParams }: URLProps) => {
             <Votes
               type='question'
               itemId={JSON.stringify(result._id)}
-              userId={JSON.stringify(mongoUser._id)}
+              userId={clerkId?JSON.stringify(mongoUser._id):null}
               upvotes={result.upvotes.length}
-              hasupvoted={result.upvotes.includes(mongoUser._id)}
+              hasupvoted={clerkId?result.upvotes.includes(mongoUser._id):false}
               downvotes={result.downvotes.length}
-              hasdownvoted={result.downvotes.includes(mongoUser._id)}
-              hasSaved={mongoUser.saved.includes(result._id)}
+              hasdownvoted={clerkId?result.downvotes.includes(mongoUser._id):false}
+              hasSaved={clerkId? mongoUser.saved.includes(result._id):false}
             />
           </div>
         </div>
@@ -94,7 +98,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
 
       <AllAnswers
         questionId={result._id}
-        userId={mongoUser._id}
+        userId={clerkId?mongoUser._id:null}
         totalAnswers={result.answers.length}
         page={searchParams?.page}
         filter={searchParams?.filter}
@@ -103,7 +107,7 @@ const Page = async ({ params, searchParams }: URLProps) => {
       <Answer
         question={result.content}
         questionId={JSON.stringify(result._id)}
-        authorId={JSON.stringify(mongoUser._id)}
+        authorId={clerkId?JSON.stringify(mongoUser._id):null}
       />
     </>
   )

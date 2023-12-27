@@ -12,7 +12,7 @@ const page = async ({ params, searchParams }: URLProps) => {
   const result = await getQuestionsByTagId({
     tagId: params.id,
     searchQuery: searchParams.q,
-    clerkId: searchParams.userId,
+    clerkId: searchParams.userId?searchParams.userId:null,
     page: searchParams.page ? +searchParams.page : 1,
     pageSize: 10,
   })

@@ -24,7 +24,7 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
 })
 
 interface AnswerProps {
-  authorId: string
+  authorId: string | null
   question: string
   questionId: string
 }
@@ -48,7 +48,7 @@ const Answer = ({ authorId, question, questionId }: AnswerProps) => {
     try {
       await createAnswer({
         content: value.answer,
-        author: JSON.parse(authorId),
+        author: JSON.parse(authorId?authorId:""),
         question: JSON.parse(questionId),
         path: pathname,
       })

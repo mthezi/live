@@ -11,7 +11,7 @@ import toast from 'react-hot-toast'
 interface VotesProps {
   type: string
   itemId: string
-  userId: string
+  userId: string | null
   upvotes: number
   hasupvoted: boolean
   downvotes: number
@@ -100,7 +100,7 @@ const Votes = ({
 
   const handleSave = async () => {
     await toggleSaveQuestion({
-      userId: JSON.parse(userId),
+      userId: JSON.parse(userId?userId:""),
       questionId: JSON.parse(itemId),
       path: pathname,
     })
